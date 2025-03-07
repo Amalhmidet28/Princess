@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "837193980540",
+    "project_id": "pricess-app-salon",
+    "storage_bucket": "pricess-app-salon.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:837193980540:android:e4ba4d0c3f646d1c45c7f9",
+        "android_client_info": {
+          "package_name": "com.retrytech.cutfx"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "837193980540-3k12g064s92kqacg4o53q1jbescol55f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAg21eGh-LLD7lbO4mwy5VKn1qxyYhBgwU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "837193980540-3k12g064s92kqacg4o53q1jbescol55f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
