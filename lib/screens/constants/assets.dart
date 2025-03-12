@@ -99,5 +99,6 @@ class SvgAssets {
 </svg>
 ''';
 
+  // ignore: prefer_typing_uninitialized_variables
   static var eyeOffIcon;
 }

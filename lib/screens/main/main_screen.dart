@@ -39,7 +39,7 @@ class MainScreen extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 children: [
                   HomeScreen(
-                    onMenuClick: _openDrawer,
+                   // onMenuClick: _openDrawer,
                   ),
                   FavouriteScreen(
                     onMenuClick: _openDrawer,
@@ -218,19 +218,19 @@ class BgRoundImageWidget extends StatelessWidget {
   final double? height;
   final double? width;
   final Color? imageColor;
-  final Color? bgColor;
+  final Color? bgColor; // Utilisé comme couleur de fond
   final Function()? onTap;
 
   const BgRoundImageWidget({
-    super.key,
+    Key? key,
     required this.image,
     this.imagePadding,
     this.onTap,
     this.imageColor,
-    this.bgColor,
+    this.bgColor, // Optionnel
     this.height,
     this.width,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

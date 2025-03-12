@@ -60,6 +60,7 @@ dependencies:
 
   #Google Sign In
   google_sign_in: ^6.2.1
+  flutter_facebook_auth: ^7.0.1
 
   #Permission
   permission_handler: ^11.3.1

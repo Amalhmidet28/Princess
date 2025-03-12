@@ -1,4 +1,3 @@
-import 'package:cutfx/screens/login/email_login_screen.dart';
 import 'package:cutfx/screens/login/login_option_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';

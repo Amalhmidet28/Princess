@@ -42,7 +42,7 @@ class AppRes {
         messageText: Text(
           msg,
           style: kSemiBoldThemeTextStyle.copyWith(
-            color: positive ? ColorRes.themeColor : ColorRes.bitterSweet,
+            color: positive ? const Color.fromARGB(255, 20, 115, 130) : ColorRes.bitterSweet,
           ),
         ),
         duration: const Duration(seconds: 2),

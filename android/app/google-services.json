@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "837193980540-knnv840km8018l41c366hj1401rv1kdn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.retrytech.cutfx",
+            "certificate_hash": "e95e85eca7c458c07418ff080d5c6cc068806c66"
+          }
+        },
+        {
           "client_id": "837193980540-3k12g064s92kqacg4o53q1jbescol55f.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -33,6 +41,36 @@
           ]
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:837193980540:android:1d61998ef17c120545c7f9",
+        "android_client_info": {
+          "package_name": "com.retrytech.cutfx_salon"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "837193980540-3k12g064s92kqacg4o53q1jbescol55f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAg21eGh-LLD7lbO4mwy5VKn1qxyYhBgwU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "837193980540-3k12g064s92kqacg4o53q1jbescol55f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+      
     }
   ],
   "configuration_version": "1"

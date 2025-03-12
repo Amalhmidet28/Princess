@@ -3,23 +3,23 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>233010520838-5e92pv8nkua7v9orqh5266fualhpmnr4.apps.googleusercontent.com</string>
+	<string>837193980540-2kk62bsl4gouv8t5c1iu8jtk4nn254k6.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.233010520838-5e92pv8nkua7v9orqh5266fualhpmnr4</string>
+	<string>com.googleusercontent.apps.837193980540-2kk62bsl4gouv8t5c1iu8jtk4nn254k6</string>
 	<key>ANDROID_CLIENT_ID</key>
-	<string>233010520838-ahh3fapdbhhh2k39uigoai5eodivu3ij.apps.googleusercontent.com</string>
+	<string>837193980540-knnv840km8018l41c366hj1401rv1kdn.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyAhRIrOqyLPNAXhicIUMJHfehyRQjtyeVs</string>
+	<string>AIzaSyAGpSdtS_wv9UwGOTm5toNLeJMVvrQXB9k</string>
 	<key>GCM_SENDER_ID</key>
-	<string>233010520838</string>
+	<string>837193980540</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.retrytech.cutfx</string>
 	<key>PROJECT_ID</key>
-	<string>cutfx-27155</string>
+	<string>pricess-app-salon</string>
 	<key>STORAGE_BUCKET</key>
-	<string>cutfx-27155.appspot.com</string>
+	<string>pricess-app-salon.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:233010520838:ios:0494fced58698be4a4b487</string>
+	<string>1:837193980540:ios:2f33318036e43bb545c7f9</string>
 </dict>
 </plist>

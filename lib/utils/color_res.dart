@@ -64,5 +64,7 @@ class ColorRes {
   static const Color googleGreen = Color(0xFF34A853);
   static const Color googleYellow = Color(0xFFFBBC05);
   static const Color appleBlack = Color(0xFF000000);
+
+  static var grey;
 }
 

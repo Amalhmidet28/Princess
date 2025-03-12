@@ -117,7 +117,7 @@ class _ChangeLanguageScreenState extends State<ChangeLanguageScreen> {
                     sharedPref.saveString(
                         ConstRes.languageCode, languageCode[value]);
                     SharePref.selectedLanguage = languageCode[value];
-                    RestartWidget.restartApp(Get.context!);
+                    //RestartWidget.restartApp(Get.context!);
                   },
                   title: Text(
                     languages[index],

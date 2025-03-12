@@ -1,13 +1,12 @@
 import 'package:cutfx/bloc/registration/registration_bloc.dart';
-import 'package:cutfx/utils/asset_res.dart';
 import 'package:cutfx/utils/color_res.dart';
-import 'package:cutfx/utils/custom/custom_widget.dart';
 import 'package:cutfx/utils/style_res.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class EmailRegistrationScreen extends StatelessWidget {
   const EmailRegistrationScreen({super.key});
@@ -18,122 +17,102 @@ class EmailRegistrationScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) => RegistrationBloc(),
       child: Scaffold(
-        body: BlocBuilder<RegistrationBloc, RegistrationState>(
-          builder: (context, state) {
-            RegistrationBloc registrationBloc =
-                context.read<RegistrationBloc>();
-            return Column(
-              children: [
-                Container(
-                  color: ColorRes.smokeWhite,
-                  width: double.infinity,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                  child: SafeArea(
-                    bottom: false,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+        backgroundColor: Colors.white,
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Container(
+              constraints: const BoxConstraints(maxWidth: 480),
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 48,
+                    child: Row(
                       children: [
-                        CustomCircularInkWell(
-                          onTap: () {
-                            Get.back();
-                          },
-                          child: const Image(
-                            image: AssetImage(AssetRes.icBack),
-                            height: 30,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Text(
-                          AppLocalizations.of(context)!.emailRegistration,
-                          style: kBoldThemeTextStyle,
-                        ),
-                        Text(
-                          AppLocalizations.of(context)!
-                              .enterYourDetailsAndCompleteProfileForBetterExperience,
-                          style: kLightWhiteTextStyle.copyWith(
-                            color: ColorRes.empress,
+                        GestureDetector(
+                          onTap: () => Get.back(),
+                          child: const Icon(
+                            Icons.arrow_back,
+                            color: Color(0xFF1C1B1A),
                           ),
                         ),
                       ],
                     ),
                   ),
-                ),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: SafeArea(
-                      top: false,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Column(
-                          children: [
-                            const SizedBox(
-                              height: 30,
-                            ),
-                            TextWithTextFieldSmokeWhiteWidget(
-                              title: AppLocalizations.of(context)!.fullName,
-                              controller:
-                                  registrationBloc.fullNameTextController,
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            TextWithTextFieldSmokeWhiteWidget(
-                              title: AppLocalizations.of(context)!.emailAddress,
-                              controller: registrationBloc.emailTextController,
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            TextWithTextFieldSmokeWhiteWidget(
-                              isPassword: true,
-                              title: AppLocalizations.of(context)!.password,
-                              controller:
-                                  registrationBloc.passwordTextController,
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            TextWithTextFieldSmokeWhiteWidget(
-                              title:
-                                  AppLocalizations.of(context)!.confirmPassword,
-                              controller: registrationBloc
-                                  .confirmPasswordTextController,
-                              isPassword: true,
-                            ),
-                          ],
-                        ),
-                      ),
+                  const SizedBox(height: 62),
+                  Text(
+                    AppLocalizations.of(context)!.emailRegistration,
+                    style: GoogleFonts.dmSerifDisplay(
+                      fontSize: 48,
+                      fontWeight: FontWeight.w700,
+                      height: 1.1,
+                      color: const Color(0xFF1C1B1A),
                     ),
                   ),
-                ),
-                SafeArea(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20.0, vertical: 10),
-                    child: SizedBox(
-                      width: double.infinity,
-                      height: 55,
-                      child: TextButton(
-                        style: kButtonThemeStyle,
-                        onPressed: () {
-                          context
-                              .read<RegistrationBloc>()
-                              .add(ContinueRegistrationEvent());
-                        },
-                        child: Text(
-                          AppLocalizations.of(context)!.continue_,
-                          style: kRegularWhiteTextStyle,
-                        ),
-                      ),
-                    ),
+                  const SizedBox(height: 62),
+                  BlocBuilder<RegistrationBloc, RegistrationState>(
+                    builder: (context, state) {
+                      RegistrationBloc registrationBloc =
+                          context.read<RegistrationBloc>();
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          TextWithTextFieldSmokeWhiteWidget(
+                            title: AppLocalizations.of(context)!.fullName,
+                            controller: registrationBloc.fullNameTextController,
+                          ),
+                          const SizedBox(height: 20),
+                          TextWithTextFieldSmokeWhiteWidget(
+                            title: AppLocalizations.of(context)!.emailAddress,
+                            controller: registrationBloc.emailTextController,
+                          ),
+                          const SizedBox(height: 20),
+                          TextWithTextFieldSmokeWhiteWidget(
+                            title: AppLocalizations.of(context)!.password,
+                            controller: registrationBloc.passwordTextController,
+                            isPassword: true,
+                          ),
+                          const SizedBox(height: 20),
+                          TextWithTextFieldSmokeWhiteWidget(
+                            title: AppLocalizations.of(context)!.confirmPassword,
+                            controller: registrationBloc.confirmPasswordTextController,
+                            isPassword: true,
+                          ),
+                          const SizedBox(height: 20),
+                          ElevatedButton(
+                            onPressed: () {
+                              context
+                                  .read<RegistrationBloc>()
+                                  .add(ContinueRegistrationEvent());
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: const Color(0xFFA57864),
+                              foregroundColor: Colors.white,
+                              elevation: 4,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(100),
+                              ),
+                              padding: const EdgeInsets.symmetric(vertical: 18),
+                            ),
+                            child: Text(
+                              AppLocalizations.of(context)!.continue_,
+                              style: GoogleFonts.figtree(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   ),
-                ),
-              ],
-            );
-          },
+                ],
+              ),
+            ),
+          ),
         ),
       ),
     );
