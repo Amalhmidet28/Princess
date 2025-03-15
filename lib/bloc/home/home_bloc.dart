@@ -30,6 +30,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   List<SalonData> salons = [];
   HomePageData? homePageData;
 
+  var nearBySalons;
+
+  var mostPopularSalons;
+
+  var nearbySalons;
+
   void fetchLocation() async {
     await Geolocator.requestPermission()
         .then((value) {})
@@ -49,4 +55,6 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     salons = salonByCoordinates.data ?? [];
     add(FetchNearBySalonEvent());
   }
+
+  fetchHomeData() {}
 }

@@ -21,19 +21,17 @@ class TopRatedSalonsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 350,
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-      alignment: Alignment.topLeft,
+    return SizedBox(
+      height: 250, // Ajustez cette hauteur selon vos besoins
       child: ListView.builder(
-        itemCount: topRatedSalons.length > 5 ? 5 : topRatedSalons.length,
-        primary: false,
-        shrinkWrap: true,
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.all(0),
+        scrollDirection: Axis.horizontal, // Défilement horizontal
+        itemCount: topRatedSalons.length,
         itemBuilder: (context, index) {
           SalonData salonData = topRatedSalons[index];
-          return ItemTopRatedSalon(salonData);
+          return SizedBox(
+            width: 200, // Largeur fixe pour chaque élément
+            child: ItemTopRatedSalon(salonData),
+          );
         },
       ),
     );
@@ -51,167 +49,172 @@ class ItemTopRatedSalon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(5.0),
-      child: CustomCircularInkWell(
-        onTap: () {
-          Get.to(() => const SalonDetailsScreen(), arguments: salonData.id);
-        },
-        child: AspectRatio(
-          aspectRatio: 1 / 1.2,
-          child: ClipRRect(
-            borderRadius: const BorderRadius.all(Radius.circular(20)),
-            child: Stack(
-              children: [
-                FadeInImage.assetNetwork(
-                  image:
-                      '${ConstRes.itemBaseUrl}${(salonData.images != null && salonData.images!.isNotEmpty) ? salonData.images![0].image : ''}',
-                  height: double.infinity,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                  imageErrorBuilder: errorBuilderForImage,
-                  placeholderErrorBuilder: loadingImage,
-                  placeholder: '1',
-                ),
-                Positioned(
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  child: Stack(
-                    children: [
-                      Column(
-                        children: [
-                          const SizedBox(
-                            height: 16,
-                          ),
-                          ClipRRect(
-                            child: BackdropFilter(
-                              filter: ImageFilter.blur(
-                                sigmaX: 8.0,
-                                sigmaY: 8.0,
-                                tileMode: TileMode.mirror,
-                              ),
-                              child: Container(
-                                width: double.infinity,
-                                color: ColorRes.black.withOpacity(.4),
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 15,
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const SizedBox(
-                                      height: 25,
-                                    ),
-                                    Text(
-                                      salonData.salonName ?? '',
-                                      style: kSemiBoldWhiteTextStyle.copyWith(
-                                        fontSize: 17,
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 5,
-                                    ),
-                                    Text(
-                                      salonData.salonAddress ?? '',
-                                      style: kThinWhiteTextStyle,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                    Visibility(
-                                      visible: salonData.rating != 0,
-                                      replacement: const SizedBox(
-                                        height: 26,
-                                      ),
-                                      child: RatingBar(
-                                        initialRating:
-                                            salonData.rating?.toDouble() ?? 0,
-                                        ignoreGestures: true,
-                                        ratingWidget: RatingWidget(
-                                          full: const Icon(
-                                            Icons.star_rounded,
-                                            color: ColorRes.sun,
-                                          ),
-                                          half: const Icon(
-                                            Icons.star_rounded,
-                                          ),
-                                          empty: const Icon(
-                                            Icons.star_rounded,
-                                            color: ColorRes.darkGray,
-                                          ),
-                                        ),
-                                        onRatingUpdate: (value) {},
-                                        itemSize: 22,
-                                      ),
-                                    ),
-                                    Align(
-                                      alignment: AlignmentDirectional.centerEnd,
-                                      child: Text(
-                                        '${AppRes.calculateDistance(double.parse(salonData.salonLat ?? '0'), double.parse(salonData.salonLong ?? '0'))} Km Away ',
-                                        style: kLightWhiteTextStyle.copyWith(
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 12,
-                                    ),
-                                  ],
-                                ),
-                              ),
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        width: 180, // Largeur cohérente avec le parent
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.3),
+              spreadRadius: 2,
+              blurRadius: 5,
+            )
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(15),
+          child: Stack(
+            children: [
+              FadeInImage.assetNetwork(
+                image:
+                    '${ConstRes.itemBaseUrl}${(salonData.images != null && salonData.images!.isNotEmpty) ? salonData.images![0].image : ''}',
+                height: double.infinity,
+                width: double.infinity,
+                fit: BoxFit.cover,
+                imageErrorBuilder: errorBuilderForImage,
+                placeholderErrorBuilder: loadingImage,
+                placeholder: '1',
+              ),
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: Stack(
+                  children: [
+                    Column(
+                      children: [
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        ClipRRect(
+                          child: BackdropFilter(
+                            filter: ImageFilter.blur(
+                              sigmaX: 8.0,
+                              sigmaY: 8.0,
+                              tileMode: TileMode.mirror,
                             ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          OpenClosedStatusWidget(
-                            salonData: salonData,
-                          ),
-                          Visibility(
-                            visible: salonData.topRated == 1,
-                            child: Expanded(
-                              child: Stack(
+                            child: Container(
+                              width: double.infinity,
+                              color: ColorRes.black.withOpacity(.4),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 15,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Container(
-                                    decoration: const BoxDecoration(
-                                      gradient: LinearGradient(
-                                        colors: [
-                                          ColorRes.pancho,
-                                          ColorRes.fallow
-                                        ],
-                                      ),
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(100),
-                                      ),
+                                  const SizedBox(
+                                    height: 25,
+                                  ),
+                                  Text(
+                                    salonData.salonName ?? '',
+                                    style: kSemiBoldWhiteTextStyle.copyWith(
+                                      fontSize: 17,
                                     ),
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 15,
-                                      vertical: 8,
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  Text(
+                                    salonData.salonAddress ?? '',
+                                    style: kThinWhiteTextStyle,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                  Visibility(
+                                    visible: salonData.rating != 0,
+                                    replacement: const SizedBox(
+                                      height: 26,
                                     ),
+                                    child: RatingBar(
+                                      initialRating:
+                                          salonData.rating?.toDouble() ?? 0,
+                                      ignoreGestures: true,
+                                      ratingWidget: RatingWidget(
+                                        full: const Icon(
+                                          Icons.star_rounded,
+                                          color: ColorRes.sun,
+                                        ),
+                                        half: const Icon(
+                                          Icons.star_rounded,
+                                        ),
+                                        empty: const Icon(
+                                          Icons.star_rounded,
+                                          color: ColorRes.darkGray,
+                                        ),
+                                      ),
+                                      onRatingUpdate: (value) {},
+                                      itemSize: 22,
+                                    ),
+                                  ),
+                                  Align(
+                                    alignment: AlignmentDirectional.centerEnd,
                                     child: Text(
-                                      AppLocalizations.of(context)!
-                                          .topRated
-                                          .toUpperCase(),
+                                      '${AppRes.calculateDistance(double.parse(salonData.salonLat ?? '0'), double.parse(salonData.salonLong ?? '0'))} Km Away ',
                                       style: kLightWhiteTextStyle.copyWith(
                                         fontSize: 12,
-                                        letterSpacing: 1,
                                       ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
                                     ),
+                                  ),
+                                  const SizedBox(
+                                    height: 12,
                                   ),
                                 ],
                               ),
                             ),
                           ),
-                        ],
-                      ),
-                    ],
-                  ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        OpenClosedStatusWidget(
+                          salonData: salonData,
+                        ),
+                        Visibility(
+                          visible: salonData.topRated == 1,
+                          child: Expanded(
+                            child: Stack(
+                              children: [
+                                Container(
+                                  decoration: const BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        ColorRes.pancho,
+                                        ColorRes.fallow
+                                      ],
+                                    ),
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(100),
+                                    ),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 15,
+                                    vertical: 8,
+                                  ),
+                                  child: Text(
+                                    AppLocalizations.of(context)!
+                                        .topRated
+                                        .toUpperCase(),
+                                    style: kLightWhiteTextStyle.copyWith(
+                                      fontSize: 12,
+                                      letterSpacing: 1,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

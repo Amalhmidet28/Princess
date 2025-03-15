@@ -1,6 +1,7 @@
 import 'package:cutfx/bloc/confirmbooking/payment_gateway.dart';
 import 'package:cutfx/model/home/home_page_data.dart';
 import 'package:cutfx/screens/fav/favourite_screen.dart';
+import 'package:cutfx/screens/home/top_rated_salon.dart';
 import 'package:cutfx/screens/main/main_screen.dart';
 import 'package:cutfx/screens/notification/notification_screen.dart';
 import 'package:cutfx/screens/search/search_screen.dart';
@@ -14,6 +15,8 @@ import 'package:cutfx/bloc/home/home_bloc.dart';
 import 'package:cutfx/model/user/salon_user.dart';
 import 'package:cutfx/utils/asset_res.dart';
 import 'package:cutfx/utils/style_res.dart';
+import 'package:cutfx/screens/categories/categories_screen.dart';
+import 'package:cutfx/screens/toprated/top_rated_salon_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -26,6 +29,7 @@ class HomeScreen extends StatelessWidget {
         builder: (context, state) {
           HomeBloc homeBloc = context.read<HomeBloc>();
           SalonUser? salonUser = homeBloc.salonUser;
+          HomePageData? homePageData = state is HomeDataFoundState ? state.homePageData : null;
 
           return Scaffold(
             appBar: AppBar(
@@ -35,18 +39,19 @@ class HomeScreen extends StatelessWidget {
                 children: [
                   Image.asset(
                     'asset/artwork.png',
-                    height: 30, // Adjust according to your logo size
+                    height: 30,
                   ),
                   const SizedBox(width: 15),
                   Text(
                     'Morning, ${salonUser?.data?.fullname ?? ""} 👋',
                     style: const TextStyle(
                       fontFamily: 'RecklessNeue-Bold',
+                      fontWeight: FontWeight.bold,
                       color: Colors.black,
                       fontSize: 28,
                     ),
                   ),
-                  const SizedBox(width: 15),
+                  const Spacer(),
                   Material(
                     color: Colors.transparent,
                     child: BgRoundImageWidget(
@@ -80,13 +85,11 @@ class HomeScreen extends StatelessWidget {
                     const SizedBox(height: 10),
                     _buildSearchBar(),
                     const SizedBox(height: 20),
-                    _buildCategoriesSection(),
+                    _buildCategoriesSection(homePageData),
                     const SizedBox(height: 20),
-                    // You can place your BannerWidget here directly
-                    BannerWidget(
-                      pageController: PageController(),
-                      homePageData: HomePageData(),
-                    ),
+                  
+                    const SizedBox(height: 20),
+                    _buildTopRatedSalonsSection(homePageData),
                     const SizedBox(height: 20),
                     _buildMostPopularSection(),
                   ],
@@ -108,7 +111,7 @@ class HomeScreen extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12),
       child: Row(
         children: [
-          const Icon(Icons.search, color: Color.fromARGB(255, 245, 219, 194)),
+          const Icon(Icons.search, color: Color.fromARGB(255, 230, 186, 145)),
           const SizedBox(width: 10),
           Expanded(
             child: TextField(
@@ -120,7 +123,7 @@ class HomeScreen extends StatelessWidget {
           ),
           IconButton(
             icon: const Icon(Icons.tune,
-                color: Color.fromARGB(255, 245, 219, 194)),
+                color: Color.fromARGB(255, 230, 186, 145)),
             onPressed: () {},
           ),
         ],
@@ -128,55 +131,72 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCategoriesSection() {
+  Widget _buildCategoriesSection(HomePageData? homePageData) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 100),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            _buildCategoryIcon("Haircuts", Icons.cut),
-            _buildCategoryIcon("Make up", Icons.brush),
-            _buildCategoryIcon("Pedicure", Icons.spa),
-            _buildCategoryIcon("Massage", Icons.self_improvement),
-          ],
+    
+        const SizedBox(height: 10),
+        GridView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 4,
+            childAspectRatio: 1,
+          ),
+          itemCount: homePageData?.data?.categories?.length ?? 0,
+          itemBuilder: (context, index) {
+            var category = homePageData?.data?.categories?[index];
+            return GestureDetector(
+              onTap: () {
+                Get.to(() => const CategoriesScreen());
+              },
+              child: Column(
+                children: [
+                  CircleAvatar(
+                    radius: 30,
+                    backgroundColor: const Color.fromARGB(255, 248, 232, 215),
+                    child: Icon(Icons.category, color: const Color(0xFFA67C52)),
+                  ),
+                  const SizedBox(height: 5),
+                  Text(category?.title ?? 'Category'),
+                ],
+              ),
+            );
+          },
         ),
       ],
     );
   }
 
-  Widget _buildCategoryIcon(String label, IconData icon) {
-    return Column(
-      children: [
-        CircleAvatar(
-          radius: 30,
-          backgroundColor: const Color.fromARGB(255, 248, 232, 215),
-          child: Icon(icon, color: const Color(0xFFA67C52), size: 30),
+  Widget _buildTopRatedSalonsSection(HomePageData? homePageData) {
+  // Récupération des salons les mieux notés depuis les données
+  final topRatedSalons = homePageData?.data?.topRatedSalons ?? [];
+
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      const Padding(
+        padding: EdgeInsets.symmetric(horizontal: 15),
+        child: Text(
+          "Most popular",
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
-        const SizedBox(height: 5),
-        Text(label, style: const TextStyle(fontSize: 14)),
-      ],
-    );
-  }
+      ),
+      const SizedBox(height: 10),
+      // Utilisation de TopRatedSalonsWidget pour afficher les salons
+      TopRatedSalonsWidget(topRatedSalons: topRatedSalons),
+    ],
+  );
+}
 
   Widget _buildMostPopularSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 10),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Text(
-              "Most Popular",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            TextButton(
-              onPressed: () {},
-              child: const Text("See All"),
-            ),
-          ],
+        const Text(
+          "Near your Location",
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 10),
         _buildPopularSalonCard(),
@@ -205,15 +225,9 @@ class HomeScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: const [
-                  Text(
-                    "Salon Name",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
+                  Text("Salon Name", style: TextStyle(fontWeight: FontWeight.bold)),
                   SizedBox(height: 5),
-                  Text(
-                    "1.2 km  |  ★ 4.8",
-                    style: TextStyle(color: Colors.grey),
-                  ),
+                  Text("1.2 km  |  ★ 4.8", style: TextStyle(color: Colors.grey)),
                 ],
               ),
             ),
@@ -256,7 +270,7 @@ class BannerWidget extends StatelessWidget {
                     fit: BoxFit.cover,
                     width: double.infinity,
                     height: double.infinity,
-                    placeholder: '1',
+                    placeholder: '0',
                     placeholderErrorBuilder: loadingImage,
                   ),
                   Directionality(
@@ -300,3 +314,4 @@ class BannerWidget extends StatelessWidget {
     );
   }
 }
+

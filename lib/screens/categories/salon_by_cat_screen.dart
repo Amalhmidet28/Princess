@@ -92,7 +92,7 @@ class CategoryDetailScreen extends StatelessWidget {
                                                 onTap: () {
                                                   Get.to(
                                                       () =>
-                                                          const TopRatedSalonScreen(),
+                                                          const TopRatedSalonScreen(salon:Salon.new,),
                                                       arguments: Get.arguments);
                                                 },
                                                 child: Text(

@@ -346,7 +346,7 @@ class S {
   /// `Categories`
   String get categories {
     return Intl.message(
-      'Categories',
+      'Most populars',
       name: 'categories',
       desc: '',
       args: [],

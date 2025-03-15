@@ -13,7 +13,10 @@ class CategoriesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Categories> categories = Get.arguments;
+    final arguments = Get.arguments;
+List<Categories> categories = (arguments is List<Categories>) ? arguments : [];
+
+
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(

@@ -11,7 +11,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 
 class TopRatedSalonScreen extends StatelessWidget {
-  const TopRatedSalonScreen({super.key});
+  const TopRatedSalonScreen({super.key, required salon});
 
   @override
   Widget build(BuildContext context) {

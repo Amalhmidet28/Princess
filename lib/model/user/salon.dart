@@ -26,6 +26,14 @@ class Salon {
   String? _message;
   SalonData? _data;
 
+  var image;
+
+  var distance;
+
+  var rating;
+
+  var name;
+
   Salon copyWith({
     bool? status,
     String? message,
@@ -432,6 +440,8 @@ class SalonData {
   List<ReviewData>? get reviews => _reviews;
 
   BankAccount? get bankAccount => _bankAccount;
+
+ 
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};

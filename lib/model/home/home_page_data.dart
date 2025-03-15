@@ -94,6 +94,8 @@ class Data {
   List<SalonData>? _topRatedSalons;
   List<CategoriesWithService>? _categoriesWithService;
 
+  var popularSalons;
+
   Data copyWith({
     List<Banners>? banners,
     List<Categories>? categories,
