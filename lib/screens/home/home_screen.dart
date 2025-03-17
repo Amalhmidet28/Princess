@@ -115,8 +115,8 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                   onChanged: (value) {
-                    // Logique de filtrage si nécessaire
-                  },
+      context.read<HomeBloc>().add(SearchSalonEvent(value)); // Déclenche l'événement
+    },
                 ),
               ),
               const SizedBox(height: 15),

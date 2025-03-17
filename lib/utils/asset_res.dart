@@ -5,7 +5,7 @@ class AssetRes {
   static const String icEmail = 'images/ic_email.png';
   static const String icBack = 'images/ic_back.png';
   static const String icMenu = 'images/ic_menu.png';
-  static const String icNotification = 'images/Auto Layout Horizontal.png';
+  static const String icNotification = 'images/n.png';
   static const String icSearch = 'images/ic_search.png';
   static const String icBooking = 'images/ic_booking.png';
   static const String icfav = 'asset/Bookmark.png'; 

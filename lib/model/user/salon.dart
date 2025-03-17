@@ -105,6 +105,8 @@ class SalonData {
   List<ReviewData>? _reviews;
   BankAccount? _bankAccount;
 
+  var name;
+
   SalonData({
     num? id,
     num? wallet,

@@ -1,3 +1,4 @@
+import 'package:cutfx/bloc/searchsalon/search_salon_bloc.dart';
 import 'package:cutfx/model/home/home_page_data.dart';
 import 'package:cutfx/model/salonbycoordinates/salon_by_coordinates.dart';
 import 'package:cutfx/model/user/salon.dart';
@@ -18,22 +19,35 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       salonUser = sharePref.getSalonUser();
       homePageData = await ApiService().fetchHomePageData();
       fetchLocation();
-      emit(HomeDataFoundState(homePageData));
+      emit(HomeDataFoundState(homePageData!));
     });
+
     on<FetchNearBySalonEvent>((event, emit) async {
-      emit(HomeDataFoundState(homePageData));
+      emit(HomeDataFoundState(homePageData!));
     });
+
+    on<SearchSalonEvent>((event, emit) {
+      if (event.query.isEmpty) {
+        filteredSalons = salons; // Remet la liste initiale si la recherche est vide
+      } else {
+        filteredSalons = salons
+            .where((salon) =>
+                salon.name.toLowerCase().contains(event.query.toLowerCase()))
+            .toList();
+      }
+      emit(HomeDataFoundState(homePageData!)); // Met à jour l'état avec les salons filtrés
+    });
+
     add(FetchHomeDataEvent());
   }
 
   SalonUser? salonUser;
-  List<SalonData> salons = [];
+  List<SalonData> salons = []; // Liste complète des salons
+  List<SalonData> filteredSalons = []; // Liste filtrée selon la recherche
   HomePageData? homePageData;
 
   var nearBySalons;
-
   var mostPopularSalons;
-
   var nearbySalons;
 
   void fetchLocation() async {
@@ -41,20 +55,20 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         .then((value) {})
         .onError((error, stackTrace) async {
       await Geolocator.requestPermission();
-      // SnackBarWidget().snackBarWidget('$error');
     });
 
     Position position = await Geolocator.getCurrentPosition();
     AppRes.longitude = position.longitude;
     AppRes.latitude = position.latitude;
+
     SalonByCoordinates salonByCoordinates =
         await ApiService().fetchSalonByCoordinates(
       lat: position.latitude.toString(),
       long: position.longitude.toString(),
     );
+
     salons = salonByCoordinates.data ?? [];
+    filteredSalons = salons; // Initialiser filteredSalons avec tous les salons
     add(FetchNearBySalonEvent());
   }
-
-  fetchHomeData() {}
 }
