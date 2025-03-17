@@ -217,6 +217,7 @@ class BgRoundImageWidget extends StatelessWidget {
   final double? imagePadding;
   final double? height;
   final double? width;
+  final Color? backgroundColor;
   final Color? imageColor;
   final Color? bgColor; // Utilisé comme couleur de fond
   final Function()? onTap;
@@ -227,6 +228,7 @@ class BgRoundImageWidget extends StatelessWidget {
     this.imagePadding,
     this.onTap,
     this.imageColor,
+     this.backgroundColor,
     this.bgColor, // Optionnel
     this.height,
     this.width,
@@ -240,6 +242,7 @@ class BgRoundImageWidget extends StatelessWidget {
         height: height ?? 40,
         width: width ?? 40,
         decoration: BoxDecoration(
+          
           color: bgColor ?? ColorRes.themeColor10,
           borderRadius: const BorderRadius.all(Radius.circular(100)),
         ),

@@ -190,7 +190,7 @@ class ProfileScreen extends StatelessWidget {
                                     AppLocalizations.of(context)!
                                         .deleteMyAccount,
                                     style: kLightWhiteTextStyle.copyWith(
-                                      color: ColorRes.bitterSweet,
+                                      color: const Color.fromARGB(255, 46, 39, 39),
                                       fontSize: 16,
                                     ),
                                   ),
@@ -232,8 +232,9 @@ class ProfileMenuItemWidget extends StatelessWidget {
         child: Text(
           title,
           style: kLightWhiteTextStyle.copyWith(
-            color: ColorRes.empress,
+            color: ColorRes.black,
             fontSize: 16,
+          
           ),
         ),
       ),

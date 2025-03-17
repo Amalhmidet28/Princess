@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:cutfx/model/user/salon.dart';
-import 'package:cutfx/screens/salon/salon_details_screen.dart';
 import 'package:cutfx/utils/app_res.dart';
 import 'package:cutfx/utils/color_res.dart';
 import 'package:cutfx/utils/const_res.dart';
@@ -10,12 +9,11 @@ import 'package:cutfx/utils/style_res.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:get/get.dart';
 
 class TopRatedSalonsWidget extends StatelessWidget {
   const TopRatedSalonsWidget({
     super.key,
-    required this.topRatedSalons,
+    required this.topRatedSalons, 
   });
   final List<SalonData> topRatedSalons;
 

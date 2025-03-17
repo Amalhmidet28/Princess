@@ -74,12 +74,7 @@ class SalonDetailsPage extends StatelessWidget {
                 const SizedBox(
                   width: 15,
                 ),
-                RoundCornerWithImageWidget(
-                  image: AssetRes.icMessage,
-                  onTap: () {
-                    salonDetailsBloc.onChatBtnTap();
-                  },
-                ),
+                
               ],
             ),
           ),

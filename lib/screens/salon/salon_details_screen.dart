@@ -89,6 +89,7 @@ class _SalonDetailsScreenState extends State<SalonDetailsScreen> {
                               pageController.jumpToPage(selectedIndex);
                             },
                           ),
+                          
                           Expanded(
                             child: PageView(
                               controller: pageController,
@@ -159,13 +160,13 @@ class _TabBarOfSalonDetailWidgetState extends State<TabBarOfSalonDetailWidget> {
             child: Container(
               decoration: BoxDecoration(
                 color: index == selectedIndex
-                    ? ColorRes.themeColor10
-                    : ColorRes.smokeWhite,
+                    ? const Color.fromARGB(169, 127, 64, 32)
+                    : ColorRes.white,
                 borderRadius: const BorderRadius.all(Radius.circular(100)),
                 border: Border.all(
                   color: index == selectedIndex
-                      ? ColorRes.themeColor
-                      : ColorRes.transparent,
+                      ? const Color.fromARGB(169, 127, 64, 32)
+                      : const Color.fromARGB(0, 70, 30, 10),
                   width: 1,
                 ),
               ),
@@ -184,8 +185,8 @@ class _TabBarOfSalonDetailWidgetState extends State<TabBarOfSalonDetailWidget> {
                 style: kSemiBoldTextStyle.copyWith(
                   fontSize: 15,
                   color: index == selectedIndex
-                      ? ColorRes.themeColor
-                      : ColorRes.empress,
+                      ? ColorRes.white
+                      : ColorRes.themeColor,
                 ),
               ),
             ),
@@ -552,7 +553,7 @@ class _ToggleImageWidgetState extends State<ToggleImageWidget> {
       image: isFav ? AssetRes.icFav : AssetRes.icUnFavourite,
       imagePadding: isFav ? 9 : 10,
       imageColor: isFav
-          ? ColorRes.bitterSweet
+          ? ColorRes.themeColor
           : (!widget.toolbarIsExpand ? ColorRes.mortar : ColorRes.white),
       bgColor: !widget.toolbarIsExpand
           ? ColorRes.smokeWhite1
@@ -560,6 +561,7 @@ class _ToggleImageWidgetState extends State<ToggleImageWidget> {
     );
   }
 }
+
 
 class PageIndicator extends StatefulWidget {
   const PageIndicator({

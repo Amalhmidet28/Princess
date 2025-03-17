@@ -32,7 +32,7 @@ class _SplashScreenState extends State<SplashScreen> {
           constraints: const BoxConstraints(maxWidth: 400),
           child: Padding(
             padding: const EdgeInsets.only(
-              left: 50,
+              left: 120,
               right:100,
               top: 11,
               bottom: 163,

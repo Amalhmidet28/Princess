@@ -98,40 +98,7 @@ class TopBarOfTopRatedWidget extends StatelessWidget {
                     ),
                   ),
                 ),
-                Container(
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [ColorRes.pancho, ColorRes.fallow],
-                      begin: Alignment(1, -1),
-                    ),
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(100),
-                    ),
-                  ),
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 15,
-                    vertical: 8,
-                  ),
-                  margin: const EdgeInsets.only(left: 15, right: 5),
-                  child: Text(
-                    AppLocalizations.of(context)!.topRated.toUpperCase(),
-                    style: kMediumTextStyle.copyWith(
-                      color: ColorRes.white,
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 18, vertical: 5),
-                  child: Text(
-                    'Offering best Massage services',
-                    style: kLightWhiteTextStyle.copyWith(
-                      color: ColorRes.empress,
-                      fontSize: 18,
-                    ),
-                  ),
-                ),
+                
                 Container(
                   decoration: BoxDecoration(
                     color: ColorRes.white,

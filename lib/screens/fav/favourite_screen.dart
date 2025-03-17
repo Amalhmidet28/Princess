@@ -3,8 +3,6 @@ import 'package:cutfx/bloc/fav/favourite_event.dart';
 import 'package:cutfx/bloc/fav/favourite_state.dart';
 import 'package:cutfx/screens/fav/salon_screen.dart';
 import 'package:cutfx/screens/fav/service_screen.dart';
-import 'package:cutfx/screens/main/main_screen.dart';
-import 'package:cutfx/utils/asset_res.dart';
 import 'package:cutfx/utils/color_res.dart';
 import 'package:cutfx/utils/custom/custom_widget.dart';
 import 'package:cutfx/utils/style_res.dart';

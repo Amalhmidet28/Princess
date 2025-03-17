@@ -1,4 +1,3 @@
-import 'package:cutfx/main.dart';
 import 'package:cutfx/utils/app_res.dart';
 import 'package:cutfx/utils/const_res.dart';
 import 'package:cutfx/utils/custom/custom_widget.dart';
@@ -6,7 +5,6 @@ import 'package:cutfx/utils/shared_pref.dart';
 import 'package:cutfx/utils/style_res.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:get/get.dart';
 
 class ChangeLanguageScreen extends StatefulWidget {
   const ChangeLanguageScreen({super.key});

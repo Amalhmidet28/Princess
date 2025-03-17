@@ -73,13 +73,7 @@ class LoginOptionScreen extends StatelessWidget {
                   ),
                 ),
                 // Continue with Facebook
-                IconWithTextButton(
-                  image: 'asset/Facebook.png',
-                  text: 'Continue with Facebook',
-                  onPressed: () {
-                    context.read<LoginBloc>().add(LoginClickEvent(0));
-                  },
-                ),
+                
 
                 const SizedBox(height: 20),
 

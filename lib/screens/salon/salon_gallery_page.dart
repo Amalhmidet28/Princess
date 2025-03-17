@@ -17,7 +17,7 @@ class SalonGalleryPage extends StatelessWidget {
     return SingleChildScrollView(
       physics: const AlwaysScrollableScrollPhysics(),
       child: StaggeredGrid.count(
-        crossAxisCount: 2,
+        crossAxisCount: 3,
         axisDirection: AxisDirection.down,
         children: List.generate(
           salonDetailsBloc.salonData?.gallery?.length ?? 0,

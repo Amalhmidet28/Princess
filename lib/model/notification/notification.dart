@@ -81,6 +81,8 @@ class Data {
   String? _createdAt;
   String? _updatedAt;
 
+  String? type;
+
   Data copyWith({
     num? id,
     String? title,
@@ -105,6 +107,8 @@ class Data {
   String? get createdAt => _createdAt;
 
   String? get updatedAt => _updatedAt;
+
+  get date => null;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};

@@ -7,7 +7,7 @@ class ColorRes {
   static const titleText = Color(0xff202020);
   static const neroDark = Color(0xff202020);
   static const subTitleText = Color(0xff6F6F6F);
-  static const themeColor = Color(0xff156779);
+  static const themeColor = Color(0xFFA57864);
   static const themeColor30 = Color(0x4C156779);
   static const themeColor5 = Color(0x0d156779);
   static const themeColor10 = Color(0x1a156779);
@@ -32,13 +32,13 @@ class ColorRes {
   static const fallow = Color(0xffBB996E);
   static const sun = Color(0xffF0933E);
   static const koroMiko = Color(0xffFEB54C);
-  static const pumpkin = Color(0xffFF7A19);
+  static const pumpkin = Color(0xFFA57864);
   static const pumpkin15 = Color(0x25ff7a19);
   static const monaLisa = Color(0xffFF9292);
   static const lavender = Color(0xffE2F5FA);
   static const lavender50 = Color(0x80e2f5fa);
   static const silver = Color(0xffC3C3C3);
-  static const fountainBlue = Color(0xff6DA6B2);
+  static const fountainBlue = Color(0xFFA57864);
   static const seashell = Color(0xffFFF5ED);
   static const mistyRose = Color(0xffFFEAEA);
   static const panache = Color(0xffF2FAF1);
@@ -66,5 +66,11 @@ class ColorRes {
   static const Color appleBlack = Color(0xFF000000);
 
   static var grey;
-}
 
+  static Color bistreBrown = const Color(0xFF967117); // Marron
+  static Color cinnabar = const Color(0xFFE34234); // Rouge-Orange
+  static Color roseBud = const Color(0xFFFFAB91); // Rose clair
+  static Color malibu = const Color(0xFF7DC8F7); // Bleu clair
+  static Color mountainMeadow = const Color(0xFF1AB385); // Vert
+  static Color rust = const Color(0xFFB7410E);
+}
