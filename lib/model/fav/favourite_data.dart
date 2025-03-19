@@ -23,6 +23,12 @@ class FavouriteData {
   String? _message;
   Data? _data;
 
+  var categories;
+
+  var salons;
+
+  var services;
+
   FavouriteData copyWith({
     bool? status,
     String? message,

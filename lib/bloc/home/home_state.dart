@@ -9,3 +9,7 @@ class HomeDataFoundState extends HomeState {
 
   HomeDataFoundState(this.homePageData);
 }
+class SearchResultsState extends HomeState {
+  final List<SalonData> filteredSalons;
+  SearchResultsState(this.filteredSalons);
+}

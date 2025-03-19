@@ -31,23 +31,21 @@ class FavouriteScreen extends StatelessWidget {
                 bottom: false,
                 child: Row(
                   children: [
-                    // Ajout de la flèche de retour
-                    BackButton(
-                      color: Colors.black, // Change la couleur si nécessaire
-                      onPressed: () {
-                        Navigator.of(context).pop(); // Retour à l'écran précédent
-                      },
-                    ),
-                    const SizedBox(width: 10),
-                    
+                   
+
                     const SizedBox(width: 15),
                     Text(
                       AppLocalizations.of(context)!.favourite,
-                      style: kLightWhiteTextStyle.copyWith(
-                        fontSize: 20,
-                        color: ColorRes.themeColor,
+                      style: TextStyle(
+                        fontFamily:
+                            'Figtree', 
+                        fontSize: 24,
+                        color: ColorRes.black,
+                        fontWeight: FontWeight
+                            .bold, 
                       ),
                     ),
+
                     const Spacer(),
                     BlocBuilder<FavouriteBloc, FavouriteState>(
                       builder: (context, state) {
@@ -135,7 +133,7 @@ class FavouriteScreen extends StatelessWidget {
                   SalonScreen(),
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),

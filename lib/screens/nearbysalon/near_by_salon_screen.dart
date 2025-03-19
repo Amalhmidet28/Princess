@@ -11,7 +11,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 
 class NearBySalonScreen extends StatelessWidget {
-  const NearBySalonScreen({super.key});
+  const NearBySalonScreen({super.key, required salon});
 
   @override
   Widget build(BuildContext context) {

@@ -474,7 +474,7 @@ class _ToggleImageWidgetState extends State<ToggleImageWidget> {
         }
         ApiService()
             .editUserDetails(
-                favouriteServices: widget.serviceData?.id?.toString())
+                favouriteServices: widget.serviceData?.id?.toString(), nickname: '', dob: '', email: '', address: '', gender: '', country: '')
             .then((value) {});
         isFav = !isFav!;
         setState(() {});

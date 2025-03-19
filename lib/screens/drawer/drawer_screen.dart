@@ -118,7 +118,7 @@ class DrawerScreen extends StatelessWidget {
                     buttonText: AppLocalizations.of(context)!.continue_,
                     onButtonClick: () async {
                       AppRes.showCustomLoader();
-                      await ApiService().editUserDetails(deviceToken: 'none');
+                      await ApiService().editUserDetails(deviceToken: 'none', nickname: '', dob: '', email: '', address: '', gender: '', country: '');
                       FirebaseAuth.instance.signOut();
                       AppRes.hideCustomLoader();
                       SharePref sharedPref = await SharePref().init();

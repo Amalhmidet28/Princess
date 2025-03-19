@@ -39,7 +39,7 @@ class MainScreen extends StatelessWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 children: [
                   HomeScreen(
-                   // onMenuClick: _openDrawer,
+                     onMenuClick: _openDrawer,
                   ),
                   FavouriteScreen(
                     onMenuClick: _openDrawer,

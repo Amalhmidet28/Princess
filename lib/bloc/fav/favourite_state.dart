@@ -1,6 +1,8 @@
 import 'package:cutfx/model/fav/favourite_data.dart';
 
-abstract class FavouriteState {}
+abstract class FavouriteState {
+  var services;
+}
 
 class FavouriteInitialState extends FavouriteState {}
 
@@ -13,5 +15,10 @@ class ChangeTabState extends FavouriteState {
 class FavouriteDataFound extends FavouriteState {
   final FavouriteData favouriteData;
 
-  FavouriteDataFound(this.favouriteData);
+ 
+
+
+  final Set<int> bookmarkedIds; // Track bookmarked items by ID
+
+  FavouriteDataFound(this.favouriteData, {this.bookmarkedIds = const {}});
 }

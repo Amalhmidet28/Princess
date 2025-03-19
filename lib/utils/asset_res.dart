@@ -83,6 +83,7 @@ class AssetRes {
   static const String googleIcon = 'assets/images/google_icon.png';
   static const String appleIcon = 'assets/images/apple_icon.png';
 
+  // ignore: non_constant_identifier_names
   static var bookmark_border;
 
   static var placeholder;

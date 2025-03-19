@@ -96,6 +96,8 @@ class Data {
 
   var popularSalons;
 
+  var nearBySalons;
+
   Data copyWith({
     List<Banners>? banners,
     List<Categories>? categories,

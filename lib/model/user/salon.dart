@@ -107,6 +107,8 @@ class SalonData {
 
   var name;
 
+  var services;
+
   SalonData({
     num? id,
     num? wallet,

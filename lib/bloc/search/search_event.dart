@@ -5,3 +5,7 @@ class SearchOnTabClickEvent extends SearchEvent {
 
   SearchOnTabClickEvent(this.selectedIndex);
 }
+class SearchSalonOrServiceEvent extends SearchEvent {
+  final String query;
+  SearchSalonOrServiceEvent(this.query);
+}

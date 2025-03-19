@@ -99,7 +99,7 @@ class ApiService {
     String? favouriteSalons,
     String? favouriteServices,
     String? deviceToken,
-    File? profileImage,
+    File? profileImage, required String nickname, required String dob, required String email, required String address, required String gender, required String country,
   }) async {
     var request = http.MultipartRequest(
       ConstRes.aPost,
@@ -931,4 +931,10 @@ class ApiService {
     final responseJson = jsonDecode(respStr);
     return Staff.fromJson(responseJson);
   }
+
+  fetchFavoriteSalons() {}
+
+  fetchFavoriteServices() {}
+
+  fetchCategories() {}
 }

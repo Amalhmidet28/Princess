@@ -13,7 +13,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 class TopRatedSalonsWidget extends StatelessWidget {
   const TopRatedSalonsWidget({
     super.key,
-    required this.topRatedSalons, 
+    required this.topRatedSalons,
   });
   final List<SalonData> topRatedSalons;
 

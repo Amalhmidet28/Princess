@@ -7,3 +7,7 @@ class OnTabClickEvent extends FavouriteEvent {
 }
 
 class FetchFavouriteDataEvent extends FavouriteEvent {}
+class ToggleBookmarkEvent extends FavouriteEvent {
+  final int salonId; // Identify which salon to bookmark/unbookmark
+  ToggleBookmarkEvent(this.salonId);
+}

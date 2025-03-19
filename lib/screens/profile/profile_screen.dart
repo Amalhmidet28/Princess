@@ -2,6 +2,7 @@ import 'package:cutfx/bloc/profile/profile_bloc.dart';
 import 'package:cutfx/model/user/salon_user.dart';
 import 'package:cutfx/screens/address/manage_my_addresses.dart';
 import 'package:cutfx/screens/booking/profile_booking_screen.dart';
+import 'package:cutfx/screens/edit_profile_screen.dart';
 import 'package:cutfx/screens/help&faq/help_and_faq_screen.dart';
 import 'package:cutfx/screens/payoutHistory/payout_history_screen.dart';
 import 'package:cutfx/screens/profile/chnage_password_bottom.dart';
@@ -41,57 +42,17 @@ class ProfileScreen extends StatelessWidget {
                   children: [
                     ProfileTopBarWidget(
                       onMenuClick: onMenuClick,
-                      salonUser: salonUser,
+                      salonUser: salonUser, onTap: () {  },
                     ),
                     Expanded(
                       child: SingleChildScrollView(
                         child: Column(
                           children: [
-                            Container(
-                              color: ColorRes.smokeWhite,
-                              margin: const EdgeInsets.symmetric(vertical: 5),
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 20, vertical: 15),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          AppLocalizations.of(context)!
-                                              .pushNotification,
-                                          style: kLightWhiteTextStyle.copyWith(
-                                            color: ColorRes.empress,
-                                            fontSize: 16,
-                                          ),
-                                        ),
-                                        Text(
-                                          AppLocalizations.of(context)!
-                                              .keepItOnIfYouWantToReceiveNotifications,
-                                          style: kLightWhiteTextStyle.copyWith(
-                                            color: ColorRes.subTitleText,
-                                            fontSize: 12,
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                  ToggleButton(
-                                    value: salonUser.data?.isNotification == 1,
-                                    onValueChange: (isEnable) {
-                                      ApiService().editUserDetails(
-                                          isNotification: isEnable);
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
+                            
                             ProfileMenuItemWidget(
-                              title: AppLocalizations.of(context)!.wallet,
+                              title: AppLocalizations.of(context)!.editProfile,
                               onTap: () {
-                                Get.to(() => const WalletScreen());
+                                Get.to(() => const EditProfileScreen());
                               },
                             ),
                             ProfileMenuItemWidget(
@@ -226,7 +187,7 @@ class ProfileMenuItemWidget extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: double.infinity,
-        color: ColorRes.smokeWhite,
+        color: const Color.fromARGB(255, 255, 255, 255),
         margin: const EdgeInsets.only(bottom: 5),
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
         child: Text(

@@ -48,13 +48,18 @@ class SalonUser {
 }
 
 class UserData {
-  UserData({
+   UserData({
     num? id,
     num? isBlock,
     String? identity,
     String? fullname,
+    String? nickname,
+    String? dob,
     String? email,
     String? phoneNumber,
+    String? country,
+    String? gender,
+    String? address,
     String? profileImage,
     num? isNotification,
     num? deviceType,
@@ -72,8 +77,13 @@ class UserData {
     _isBlock = isBlock;
     _identity = identity;
     _fullname = fullname;
+    _nickname = nickname;
+    _dob = dob;
     _email = email;
     _phoneNumber = phoneNumber;
+    _country = country;
+    _gender = gender;
+    _address = address;
     _profileImage = profileImage;
     _isNotification = isNotification;
     _deviceType = deviceType;
@@ -93,8 +103,13 @@ class UserData {
     _isBlock = json['is_block'];
     _identity = json['identity'];
     _fullname = json['fullname'];
+    _nickname = json['nickname'];
+    _dob = json['dob'];
     _email = json['email'];
     _phoneNumber = json['phone_number'];
+    _country = json['country'];
+    _gender = json['gender'];
+    _address = json['address'];
     _profileImage = json['profile_image'];
     _isNotification = json['is_notification'];
     _deviceType = json['device_type'];
@@ -113,8 +128,13 @@ class UserData {
   num? _isBlock;
   String? _identity;
   String? _fullname;
+  String? _nickname;
+  String? _dob;
   String? _email;
   String? _phoneNumber;
+  String? _country;
+  String? _gender;
+  String? _address;
   String? _profileImage;
   num? _isNotification;
   num? _deviceType;
@@ -127,14 +147,20 @@ class UserData {
   String? _createdAt;
   String? _updatedAt;
   num? _bookingsCount;
+  
 
-  UserData copyWith({
+   UserData copyWith({
     num? id,
     num? isBlock,
     String? identity,
     String? fullname,
+    String? nickname,
+    String? dob,
     String? email,
     String? phoneNumber,
+    String? country,
+    String? gender,
+    String? address,
     String? profileImage,
     num? isNotification,
     num? deviceType,
@@ -153,8 +179,13 @@ class UserData {
         isBlock: isBlock ?? _isBlock,
         identity: identity ?? _identity,
         fullname: fullname ?? _fullname,
+        nickname: nickname ?? _nickname,
+        dob: dob ?? _dob,
         email: email ?? _email,
         phoneNumber: phoneNumber ?? _phoneNumber,
+        country: country ?? _country,
+        gender: gender ?? _gender,
+        address: address ?? _address,
         profileImage: profileImage ?? _profileImage,
         isNotification: isNotification ?? _isNotification,
         deviceType: deviceType ?? _deviceType,
@@ -169,18 +200,20 @@ class UserData {
         bookingsCount: bookingsCount ?? _bookingsCount,
       );
 
-  num? get id => _id;
-
+ num? get id => _id;
   num? get isBlock => _isBlock;
 
   String? get identity => _identity;
 
   String? get fullname => _fullname;
-
+  String? get nickname => _nickname;
+  String? get dob => _dob;
   String? get email => _email;
 
   String? get phoneNumber => _phoneNumber;
-
+  String? get country => _country;
+  String? get gender => _gender;
+  String? get address => _address;
   String? get profileImage => _profileImage;
 
   num? get isNotification => _isNotification;
@@ -215,14 +248,19 @@ class UserData {
     return ids.contains(serviceID.toString());
   }
 
-  Map<String, dynamic> toJson() {
+   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['id'] = _id;
     map['is_block'] = _isBlock;
     map['identity'] = _identity;
     map['fullname'] = _fullname;
+    map['nickname'] = _nickname;
+    map['dob'] = _dob;
     map['email'] = _email;
     map['phone_number'] = _phoneNumber;
+    map['country'] = _country;
+    map['gender'] = _gender;
+    map['address'] = _address;
     map['profile_image'] = _profileImage;
     map['is_notification'] = _isNotification;
     map['device_type'] = _deviceType;
