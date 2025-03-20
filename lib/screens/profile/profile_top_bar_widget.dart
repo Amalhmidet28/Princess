@@ -39,11 +39,7 @@ class ProfileTopBarWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 // Icône menu
-                BgRoundImageWidget(
-                  image: AssetRes.icMenu,
-                  imagePadding: 8,
-                  onTap: onMenuClick,
-                ),
+                
                 Stack(
                   alignment: Alignment.centerLeft,
                   children: [

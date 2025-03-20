@@ -1,8 +1,9 @@
 import 'dart:io';
-
 import 'package:cutfx/bloc/login/login_bloc.dart';
 import 'package:cutfx/screens/login/email_login_screen.dart';
 import 'package:cutfx/utils/asset_res.dart';
+import 'package:cutfx/utils/color_res.dart';
+import 'package:cutfx/utils/custom/custom_widget.dart';
 import 'package:cutfx/utils/style_res.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,71 +17,70 @@ class LoginOptionScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) => LoginBloc(),
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: const Color.fromARGB(255, 247, 244, 243),
         body: SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Spacer(),
 
-                // Logo
+                // 🔹 Logo & Title
                 Center(
                   child: Column(
                     children: [
                       Image.asset(
-                        'asset/artwork.png', // Remplacez par le chemin du logo approprié
-                        width: 380,
-                        height: 200,
+                        'asset/artwork.png', // Ensure this path is correct
+                        width: 300,
+                        height: 150,
+                        fit: BoxFit.contain, // Keeps the image ratio
                       ),
                       const SizedBox(height: 20),
+                      const AppLogo(textSize: 30, width: 15, height: 15),
+                      const SizedBox(height: 10),
                       Text(
-                        "Let's you in",
-                        style: TextStyle(
-                          fontSize: 48,
-                          fontFamily:
-                              'RecklessNeue', // Nom de la famille de police définie
-                          fontWeight:
-                              FontWeight.bold, // Utilisation de la version bold
-                        ),
-                      ),
+                  "Let's you in",
+                  style: TextStyle(
+                    fontSize: 48,
+                    fontFamily: 'RecklessNeue', // Custom Font
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
                     ],
                   ),
                 ),
-                Text(
-                  AppLocalizations.of(context)!.signInToContinue,
-                  style: kSemiBoldWhiteTextStyle,
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
 
                 const SizedBox(height: 40),
+
+                // 🔹 Description
                 Text(
                   AppLocalizations.of(context)!
                       .findAndBookHairCutMassageSpaWaxingColoringServicesAnytime,
                   style: kLightWhiteTextStyle,
+                  textAlign: TextAlign.center,
                 ),
-                Visibility(
-                  visible: Platform.isIOS,
-                  child: IconWithTextButton(
+
+                const SizedBox(height: 40),
+
+                // 🔹 Apple Sign-In (Only for iOS)
+                if (Platform.isIOS)
+                  IconWithTextButton(
                     image: AssetRes.icApple,
                     text: AppLocalizations.of(context)!.signInWithApple,
                     onPressed: () {
                       context.read<LoginBloc>().add(LoginClickEvent(0));
                     },
                   ),
-                ),
-                // Continue with Facebook
-                
 
                 const SizedBox(height: 20),
 
-                // Continue with Google
+                // 🔹 Google Sign-In
                 IconWithTextButton(
                   image: AssetRes.icGoogle,
-                  text: 'Continue with Google',
+                  text: AppLocalizations.of(context)!.signInWithGoogle,
                   iconPadding: 8,
                   onPressed: () {
                     context.read<LoginBloc>().add(LoginClickEvent(1));
@@ -89,31 +89,17 @@ class LoginOptionScreen extends StatelessWidget {
 
                 const SizedBox(height: 20),
 
-                // Continue with Apple (only for iOS)
-                if (Platform.isIOS)
-                  IconWithTextButton(
-                    image: 'asset/apple.png',
-                    text: 'Continue with Apple',
-                    onPressed: () {
-                      context.read<LoginBloc>().add(LoginClickEvent(2));
-                    },
-                  ),
-                Text(
-                  AppLocalizations.of(context)!.byContinuingWithAnyOptions,
-                  style: kLightWhiteTextStyle,
-                ),
-
-                const SizedBox(height: 20),
+                // 🔹 Divider (OR)
                 Row(
-                  children: const <Widget>[
-                    Expanded(
+                  children: [
+                    const Expanded(
                       child: Divider(
                         color: Colors.grey,
                         thickness: 1,
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Text(
                         'or',
                         style: TextStyle(
@@ -124,7 +110,7 @@ class LoginOptionScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Expanded(
+                    const Expanded(
                       child: Divider(
                         color: Colors.grey,
                         thickness: 1,
@@ -132,11 +118,12 @@ class LoginOptionScreen extends StatelessWidget {
                     ),
                   ],
                 ),
+
                 const SizedBox(height: 20),
 
-                // Sign in with password
+                // 🔹 Sign in with password
                 SizedBox(
-                  width: 380,
+                  width: double.infinity,
                   height: 58,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
@@ -197,18 +184,21 @@ class IconWithTextButton extends StatelessWidget {
         style: kButtonWhiteStyle,
         onPressed: onPressed,
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.start, // Align icon & text
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              width: 90,
+              width: 40,
               padding: EdgeInsets.symmetric(
-                  horizontal: 20, vertical: iconPadding ?? 0),
-              child: Image(image: AssetImage(image)),
+                  horizontal: 15, vertical: iconPadding ?? 0),
+              child: Image.asset(image, fit: BoxFit.contain), // Fixed Image Fit
             ),
-            Center(
-              child: Text(
-                text,
-                style: kBlackButtonTextStyle,
+            Expanded(
+              child: Center(
+                child: Text(
+                  text,
+                  style: kBlackButtonTextStyle,
+                ),
               ),
             ),
           ],
