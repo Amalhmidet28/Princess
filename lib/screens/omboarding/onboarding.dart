@@ -30,11 +30,11 @@ class OnboardingScreen extends StatelessWidget {
                         semanticLabel: 'Services illustration',
                       ),
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 24),
+                        padding: const EdgeInsets.symmetric(horizontal: 14),
                         child: Column(
                           children: [
                             Container(
-                              margin: const EdgeInsets.only(top: 40),
+                              margin: const EdgeInsets.only(top: 50),
                               width: double.infinity,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -73,8 +73,8 @@ class OnboardingScreen extends StatelessWidget {
                                     children: [
                                       Container(
                                         width: double.infinity,
-                                        constraints:
-                                            const BoxConstraints(maxWidth: 300),
+                                        
+                                            
                                         child: ElevatedButton(
                                           onPressed: () {
                                             Navigator.push(
@@ -148,9 +148,6 @@ class OnboardingScreen2 extends StatelessWidget {
           //margin: EdgeInsets.symmetric(horizontal: auto),
           child: Column(
             children: [
-              // Status bar - hide on small screens
-              if (!isSmallScreen) const StatusBar(),
-
               // Main content
               Expanded(
                 child: Column(
@@ -228,7 +225,7 @@ class OnboardingScreen2 extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) =>
-                                        const OnboardingScreen3(), // Remplace avec le bon nom de ton écran
+                                        const OnboardingScreen3(), 
                                   ),
                                 );
                               },
@@ -236,7 +233,7 @@ class OnboardingScreen2 extends StatelessWidget {
                                 backgroundColor: const Color(0xFFA57864),
                                 foregroundColor: Colors.white,
                                 padding: EdgeInsets.symmetric(
-                                  vertical: isSmallScreen ? 16 : 18,
+                                  vertical: isSmallScreen ? 16 : 16,
                                   horizontal: 16,
                                 ),
                                 shape: RoundedRectangleBorder(
@@ -388,10 +385,10 @@ class OnboardingScreen3 extends StatelessWidget {
   },
   style: ElevatedButton.styleFrom(
     backgroundColor: AppTheme.buttonColor,
-    elevation: 15,
+    elevation: 10,
     shadowColor: const Color(0x403E2B23),
-    minimumSize: const Size(double.infinity, 56),
-    padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
+    minimumSize: const Size(double.infinity, 50),
+    padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 15),
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(100),
     ),
@@ -458,48 +455,7 @@ class CustomStatusBar extends StatelessWidget {
   }
 }
 
-class StatusBar extends StatelessWidget {
-  const StatusBar({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 44,
-      padding: const EdgeInsets.symmetric(horizontal: 24),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          // Time
-
-          // Status icons
-          Row(
-            children: [
-              // Signal strength
-              Row(
-                children: List.generate(
-                  4,
-                  (index) => Container(
-                    margin: const EdgeInsets.only(right: 2),
-                    width: 3,
-                    height: 8 + (index * 2),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(index == 0 ? 0.4 : 1),
-                      borderRadius: BorderRadius.circular(1),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 6),
-
-              // WiFi icon
-              // Battery ico
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
 
 class NavigationDots extends StatelessWidget {
   final int count;

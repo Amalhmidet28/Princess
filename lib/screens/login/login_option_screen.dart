@@ -1,6 +1,8 @@
 import 'dart:io';
+
 import 'package:cutfx/bloc/login/login_bloc.dart';
 import 'package:cutfx/screens/login/email_login_screen.dart';
+import 'package:cutfx/screens/web/web_view_screen.dart';
 import 'package:cutfx/utils/asset_res.dart';
 import 'package:cutfx/utils/color_res.dart';
 import 'package:cutfx/utils/custom/custom_widget.dart';
@@ -8,6 +10,7 @@ import 'package:cutfx/utils/style_res.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:get/route_manager.dart';
 
 class LoginOptionScreen extends StatelessWidget {
   const LoginOptionScreen({super.key});
@@ -17,14 +20,23 @@ class LoginOptionScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) => LoginBloc(),
       child: Scaffold(
-        backgroundColor: const Color.fromARGB(255, 247, 244, 243),
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
+        backgroundColor: ColorRes.white,
+        body: Stack(
+          children: [
+            SafeArea(
+              left: false,
+              right: false,
+              child: BlocBuilder<LoginBloc, LoginState>(
+                builder: (context, state) {
+                  return Stack(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                         
                 const Spacer(),
 
                 // 🔹 Logo & Title
@@ -32,10 +44,10 @@ class LoginOptionScreen extends StatelessWidget {
                   child: Column(
                     children: [
                       Image.asset(
-                        'asset/artwork.png', // Ensure this path is correct
+                        'asset/artwork.png', 
                         width: 300,
                         height: 150,
-                        fit: BoxFit.contain, // Keeps the image ratio
+                        fit: BoxFit.contain, 
                       ),
                       const SizedBox(height: 20),
                       const AppLogo(textSize: 30, width: 15, height: 15),
@@ -44,7 +56,7 @@ class LoginOptionScreen extends StatelessWidget {
                   "Let's you in",
                   style: TextStyle(
                     fontSize: 48,
-                    fontFamily: 'RecklessNeue', // Custom Font
+                    fontFamily: 'RecklessNeue', 
                     fontWeight: FontWeight.bold,
                   ),
                   textAlign: TextAlign.center,
@@ -53,44 +65,54 @@ class LoginOptionScreen extends StatelessWidget {
                   ),
                 ),
 
-                const SizedBox(height: 40),
+                            const AppLogo(
+                              textSize: 30, width: 10, height: 10,
+                            ),
+                            Text(
+                              AppLocalizations.of(context)!.signInToContinue,
+                              style: kSemiBoldWhiteTextStyle,
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              AppLocalizations.of(context)!
+                                  .findAndBookHairCutMassageSpaWaxingColoringServicesAnytime,
+                              style: kLightWhiteTextStyle,
+                            ),
+                            const SizedBox(
+                              height: 60,
+                            ),
+                            Visibility(
+                              visible: Platform.isIOS,
+                              child: IconWithTextButton(
+                                image: AssetRes.icApple,
+                                text: AppLocalizations.of(context)!
+                                    .signInWithApple,
+                                onPressed: () {
+                                  context
+                                      .read<LoginBloc>()
+                                      .add(LoginClickEvent(0));
+                                },
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            IconWithTextButton(
+                              image: AssetRes.icGoogle,
+                              text: AppLocalizations.of(context)!
+                                  .signInWithGoogle,
+                              iconPadding: 8,
+                              onPressed: () {
+                                context
+                                    .read<LoginBloc>()
+                                    .add(LoginClickEvent(1));
+                              },
+                            ),  Expanded(child: SizedBox()),
 
-                // 🔹 Description
-                Text(
-                  AppLocalizations.of(context)!
-                      .findAndBookHairCutMassageSpaWaxingColoringServicesAnytime,
-                  style: kLightWhiteTextStyle,
-                  textAlign: TextAlign.center,
-                ),
-
-                const SizedBox(height: 40),
-
-                // 🔹 Apple Sign-In (Only for iOS)
-                if (Platform.isIOS)
-                  IconWithTextButton(
-                    image: AssetRes.icApple,
-                    text: AppLocalizations.of(context)!.signInWithApple,
-                    onPressed: () {
-                      context.read<LoginBloc>().add(LoginClickEvent(0));
-                    },
-                  ),
-
-                const SizedBox(height: 20),
-
-                // 🔹 Google Sign-In
-                IconWithTextButton(
-                  image: AssetRes.icGoogle,
-                  text: AppLocalizations.of(context)!.signInWithGoogle,
-                  iconPadding: 8,
-                  onPressed: () {
-                    context.read<LoginBloc>().add(LoginClickEvent(1));
-                  },
-                ),
-
-                const SizedBox(height: 20),
-
-                // 🔹 Divider (OR)
-                Row(
+                            const SizedBox(height: 30), 
+Row(
                   children: [
                     const Expanded(
                       child: Divider(
@@ -124,7 +146,7 @@ class LoginOptionScreen extends StatelessWidget {
                 // 🔹 Sign in with password
                 SizedBox(
                   width: double.infinity,
-                  height: 58,
+                  height: 50,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFF9B6A5A), // Marron
@@ -149,12 +171,23 @@ class LoginOptionScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-                ),
+                ), Expanded(child: SizedBox()),
 
-                const Spacer(),
-              ],
-            ),
-          ),
+                          ],
+                        ),
+                      ),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        child: BackButton(
+                          color: ColorRes.white,
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
+            )
+          ],
         ),
       ),
     );
@@ -184,21 +217,18 @@ class IconWithTextButton extends StatelessWidget {
         style: kButtonWhiteStyle,
         onPressed: onPressed,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.start, // Align icon & text
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
-              width: 40,
+              width: 90,
               padding: EdgeInsets.symmetric(
-                  horizontal: 15, vertical: iconPadding ?? 0),
-              child: Image.asset(image, fit: BoxFit.contain), // Fixed Image Fit
+                  horizontal: 20, vertical: iconPadding ?? 0),
+              child: Image(image: AssetImage(image)),
             ),
-            Expanded(
-              child: Center(
-                child: Text(
-                  text,
-                  style: kBlackButtonTextStyle,
-                ),
+            Center(
+              child: Text(
+                text,
+                style: kBlackButtonTextStyle,
               ),
             ),
           ],

@@ -1,4 +1,5 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
+import 'package:cutfx/bloc/security/security_event.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -228,6 +229,14 @@ class S {
       name: 'emailRegistration',
       desc: '',
       args: [],
+    );
+  }
+  String get rememberMe {
+    return Intl.message(
+       "Remember Me",
+       name: "rememberMe",
+       desc:'',
+       args: [],
     );
   }
 

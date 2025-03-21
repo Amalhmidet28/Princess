@@ -7,9 +7,49 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
-class EmailRegistrationScreen extends StatelessWidget {
+class EmailRegistrationScreen extends StatefulWidget {
   const EmailRegistrationScreen({super.key});
+
+  @override
+  State<EmailRegistrationScreen> createState() =>
+      _EmailRegistrationScreenState();
+}
+
+class _EmailRegistrationScreenState extends State<EmailRegistrationScreen> {
+  bool isPasswordVisible = false;
+  bool rememberMe = false;
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  
+  // Handle Google SignIn
+  Future<void> _handleGoogleSignIn() async {
+    try {
+      GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      if (googleUser != null) {
+        // Handle sign-in result (user info, etc.)
+        print("Google User: ${googleUser.displayName}");
+      }
+    } catch (error) {
+      print("Google Sign-In error: $error");
+    }
+  }
+
+  // Handle Apple SignIn
+  /*Future<void> _handleAppleSignIn() async {
+    try {
+      final appleCredential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScope.email,
+          AppleIDAuthorizationScope.fullName,
+        ],
+      );
+      print("Apple User: ${appleCredential.email}");
+    } catch (error) {
+      print("Apple Sign-In error: $error");
+    }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +67,7 @@ class EmailRegistrationScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // 🔹 Back Button
                   SizedBox(
                     height: 48,
                     child: Row(
@@ -41,46 +82,84 @@ class EmailRegistrationScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const SizedBox(height: 62),
+
+                  const SizedBox(height: 40),
+
+                  // 🔹 Title
                   Text(
                     AppLocalizations.of(context)!.emailRegistration,
                     style: GoogleFonts.dmSerifDisplay(
                       fontSize: 48,
                       fontWeight: FontWeight.w700,
                       height: 1.1,
-                      color: const Color(0xFF1C1B1A),
+                      color: const Color.fromARGB(255, 9, 8, 7),
                     ),
                   ),
-                  const SizedBox(height: 62),
+
+                  const SizedBox(height: 40),
+
                   BlocBuilder<RegistrationBloc, RegistrationState>(
                     builder: (context, state) {
                       RegistrationBloc registrationBloc =
                           context.read<RegistrationBloc>();
+
                       return Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          TextWithTextFieldSmokeWhiteWidget(
-                            title: AppLocalizations.of(context)!.fullName,
-                            controller: registrationBloc.fullNameTextController,
-                          ),
-                          const SizedBox(height: 20),
+                          // 🔹 Email Input
                           TextWithTextFieldSmokeWhiteWidget(
                             title: AppLocalizations.of(context)!.emailAddress,
                             controller: registrationBloc.emailTextController,
+                            icon: Icons.email_outlined, // Added email icon
                           ),
+
                           const SizedBox(height: 20),
+
+                          // 🔹 Password Input with Visibility Toggle
                           TextWithTextFieldSmokeWhiteWidget(
                             title: AppLocalizations.of(context)!.password,
                             controller: registrationBloc.passwordTextController,
                             isPassword: true,
+                            icon: Icons.lock_outline, // Added password icon
+                            isPasswordVisible: isPasswordVisible,
+                            onVisibilityToggle: () {
+                              setState(() {
+                                isPasswordVisible = !isPasswordVisible;
+                              });
+                            },
                           ),
+
                           const SizedBox(height: 20),
-                          TextWithTextFieldSmokeWhiteWidget(
-                            title: AppLocalizations.of(context)!.confirmPassword,
-                            controller: registrationBloc.confirmPasswordTextController,
-                            isPassword: true,
+
+                          // 🔹 Remember Me Section
+                          Row(
+                            mainAxisAlignment:
+                                MainAxisAlignment.center, // Center horizontally
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Checkbox(
+                                value: rememberMe,
+                                activeColor: const Color(0xFFA57864),
+                                onChanged: (value) {
+                                  setState(() {
+                                    rememberMe = value!;
+                                  });
+                                },
+                              ),
+                              Text(
+                                AppLocalizations.of(context)!.rememberMe,
+                                style: GoogleFonts.figtree(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                  color: ColorRes.black,
+                                ),
+                              ),
+                            ],
                           ),
+
                           const SizedBox(height: 20),
+
+                          // 🔹 Continue Button
                           ElevatedButton(
                             onPressed: () {
                               context
@@ -105,6 +184,43 @@ class EmailRegistrationScreen extends StatelessWidget {
                               ),
                             ),
                           ),
+
+                          // 🔹 Google Login Button
+                          const SizedBox(height: 20),
+                          // 🔹 Google Login Button with Google Logo
+const SizedBox(height: 20),
+ElevatedButton(
+  onPressed: _handleGoogleSignIn,
+  style: ElevatedButton.styleFrom(
+    backgroundColor: Colors.white,
+    padding: const EdgeInsets.symmetric(vertical: 18),
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(100), // Rounded button
+    ),
+  ),
+  child: Center(
+    child: Container(
+      height: 40, 
+      width: 40,  
+      decoration: BoxDecoration(
+        shape: BoxShape.circle, 
+        image: DecorationImage(
+          image: AssetImage('asset/Googlelogo.png'), 
+          fit: BoxFit.fill, 
+        ),
+      ),
+    ),
+  ),
+),
+
+
+
+                          // 🔹 Apple Login Button
+                          /*const SizedBox(height: 20),
+                          SignInWithAppleButton(
+                            onPressed: _handleAppleSignIn,
+                            style: SignInWithAppleButtonStyle.black,
+                          ),*/
                         ],
                       );
                     },
@@ -119,11 +235,19 @@ class EmailRegistrationScreen extends StatelessWidget {
   }
 }
 
+extension on AppLocalizations {
+  String get rememberMe => rememberMe;
+  String get googleSignIn => 'Continue with Google';
+}
+
 class TextWithTextFieldSmokeWhiteWidget extends StatelessWidget {
   final String title;
   final bool? isPassword;
   final TextEditingController? controller;
   final TextInputType? textInputType;
+  final IconData? icon;
+  final bool? isPasswordVisible;
+  final VoidCallback? onVisibilityToggle;
 
   const TextWithTextFieldSmokeWhiteWidget({
     super.key,
@@ -131,6 +255,9 @@ class TextWithTextFieldSmokeWhiteWidget extends StatelessWidget {
     this.isPassword,
     this.controller,
     this.textInputType = TextInputType.text,
+    this.icon,
+    this.isPasswordVisible,
+    this.onVisibilityToggle,
   });
 
   @override
@@ -145,6 +272,7 @@ class TextWithTextFieldSmokeWhiteWidget extends StatelessWidget {
             fontSize: 16,
           ),
         ),
+        const SizedBox(height: 5),
         Container(
           decoration: BoxDecoration(
             color: ColorRes.smokeWhite,
@@ -155,18 +283,42 @@ class TextWithTextFieldSmokeWhiteWidget extends StatelessWidget {
             ),
           ),
           height: 55,
-          margin: const EdgeInsets.only(top: 5),
           padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: TextField(
-            controller: controller,
-            decoration: const InputDecoration(border: InputBorder.none),
-            style: kRegularTextStyle.copyWith(
-              color: ColorRes.charcoal50,
-            ),
-            keyboardType: textInputType,
-            obscureText: isPassword ?? false,
-            enableSuggestions: isPassword != null ? !isPassword! : true,
-            autocorrect: isPassword != null ? !isPassword! : true,
+          child: Row(
+            children: [
+              if (icon != null)
+                Icon(icon, color: ColorRes.charcoal50), // 🔹 Input Icon
+
+              const SizedBox(width: 10),
+
+              Expanded(
+                child: TextField(
+                  controller: controller,
+                  decoration: const InputDecoration(border: InputBorder.none),
+                  style: kRegularTextStyle.copyWith(
+                    color: ColorRes.charcoal50,
+                  ),
+                  keyboardType: textInputType,
+                  obscureText: isPassword ?? false
+                      ? !(isPasswordVisible ?? false)
+                      : false,
+                  enableSuggestions: isPassword != null ? !isPassword! : true,
+                  autocorrect: isPassword != null ? !isPassword! : true,
+                ),
+              ),
+
+              // 🔹 Password Visibility Toggle Button
+              if (isPassword ?? false)
+                GestureDetector(
+                  onTap: onVisibilityToggle,
+                  child: Icon(
+                    isPasswordVisible!
+                        ? Icons.visibility
+                        : Icons.visibility_off,
+                    color: ColorRes.charcoal50,
+                  ),
+                ),
+            ],
           ),
         ),
       ],

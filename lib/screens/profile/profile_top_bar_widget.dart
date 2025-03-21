@@ -13,8 +13,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
-class ProfileTopBarWidget extends StatelessWidget {
+class ProfileTopBarWidget extends StatefulWidget {
   const ProfileTopBarWidget({
     super.key,
     required this.onMenuClick,
@@ -26,6 +27,19 @@ class ProfileTopBarWidget extends StatelessWidget {
   final Function()? onMenuClick;
 
   @override
+  _ProfileTopBarWidgetState createState() => _ProfileTopBarWidgetState();
+}
+
+class _ProfileTopBarWidgetState extends State<ProfileTopBarWidget> {
+  late SalonUser? salonUser;
+
+  @override
+  void initState() {
+    super.initState();
+    salonUser = widget.salonUser;  // Initialize salonUser to reflect the initial data.
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       color: ColorRes.themeColor5,
@@ -34,23 +48,18 @@ class ProfileTopBarWidget extends StatelessWidget {
         bottom: false,
         child: Column(
           children: [
-            // Première ligne : Menu, Titre "Profile", Icône de notification
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // Icône menu
-                
                 Stack(
                   alignment: Alignment.centerLeft,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(
-                          left: 2), // Ajuste la position de l’image
+                      padding: const EdgeInsets.only(left: 2), 
                       child: Image.asset('asset/artwork.png', height: 30),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(
-                          left: 35), // Décale le texte légèrement
+                      padding: const EdgeInsets.only(left: 35), 
                       child: Text(
                         AppLocalizations.of(context)!.profile,
                         style: kLightWhiteTextStyle.copyWith(
@@ -63,57 +72,61 @@ class ProfileTopBarWidget extends StatelessWidget {
                     ),
                   ],
                 ),
-
-                // Icône de notification
                 GestureDetector(
                   onTap: () {
                     Get.to(() => const NotificationScreen());
                   },
-                  child: Image.asset(
-                    AssetRes
-                        .icNotification, // Assurez-vous que ce chemin est correct
-                    height: 26, // Taille ajustable
-                  ),
+                  child: Image.asset(AssetRes.icNotification),
                 ),
               ],
             ),
             const SizedBox(height: 15),
-
-            // Section Profil
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // Image de profil
-                  Container(
-                    width: 100,
-                    height: 100,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                    ),
-                    child: ClipOval(
-                      child: FadeInImage.assetNetwork(
-                        placeholder: '',
-                        image:
-                            '${ConstRes.itemBaseUrl}${salonUser?.data?.profileImage ?? ''}',
-                        fit: BoxFit.cover,
-                        imageErrorBuilder: errorBuilderForImage,
-                        placeholderErrorBuilder: loadingImage,
+                  Stack(
+                    alignment: Alignment.bottomRight,
+                    children: [
+                      // Profile Picture
+                      CircleAvatar(
+                        radius: 50,
+                        backgroundImage: (salonUser?.profileImage ?? '').isNotEmpty
+                            ? NetworkImage(salonUser!.profileImage!)
+                            : const AssetImage("assets/default_profile.png") as ImageProvider,
                       ),
-                    ),
+                      // Edit Icon
+                      Positioned(
+                        right: 4,
+                        bottom: 4,
+                        child: InkWell(
+                          onTap: () {
+                            _showImagePicker(context);
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(6),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF8B5E3B),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.edit,
+                              size: 18,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 10),
-
-                  // Nom de l'utilisateur
                   Text(
                     salonUser?.data?.fullname?.capitalize ?? '',
                     style: kBoldThemeTextStyle.copyWith(fontSize: 20),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 5),
-
-                  // Email de l'utilisateur
                   Text(
                     salonUser?.data?.email?.isNotEmpty == true
                         ? salonUser!.data!.email!
@@ -126,8 +139,6 @@ class ProfileTopBarWidget extends StatelessWidget {
                     ),
                     textAlign: TextAlign.center,
                   ),
-
-                  // Bouton "Edit Details"
                   CustomCircularInkWell(
                     onTap: () {
                       Get.to(() => const EditProfileScreen())?.then((value) {
@@ -142,10 +153,9 @@ class ProfileTopBarWidget extends StatelessWidget {
                         borderRadius: BorderRadius.all(Radius.circular(100)),
                       ),
                       margin: const EdgeInsets.only(top: 10),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 15, vertical: 8),
+                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
                       child: Center(
-                       
+                        child: Text('Edit Details'),
                       ),
                     ),
                   ),
@@ -156,5 +166,57 @@ class ProfileTopBarWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  // Function to show the image picker modal
+  void _showImagePicker(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Wrap(
+          children: [
+            ListTile(
+              leading: const Icon(Icons.camera),
+              title: const Text('Take a Photo'),
+              onTap: () async {
+                Navigator.pop(context);
+                await _pickImage(ImageSource.camera, context);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.image),
+              title: const Text('Choose from Gallery'),
+              onTap: () async {
+                Navigator.pop(context);
+                await _pickImage(ImageSource.gallery, context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // Picks an image from Camera or Gallery
+  Future<void> _pickImage(ImageSource source, BuildContext context) async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: source);
+
+    if (pickedFile != null) {
+      // Upload image and update UI
+      await _uploadProfilePicture(pickedFile.path);
+    }
+  }
+
+  // Uploads the image to the server
+  Future<void> _uploadProfilePicture(String filePath) async {
+    // Implement image upload API call here
+
+    // After the image is uploaded, update the salonUser object
+    setState(() {
+      salonUser!.profileImage = filePath; // Update the profile image URL
+    });
+
+    print("Uploading image: $filePath");
   }
 }

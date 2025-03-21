@@ -38,6 +38,8 @@ class HomePageData {
 
   Data? get data => _data;
 
+  set nearbySalons(List<SalonData> nearbySalons) {}
+
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['status'] = _status;

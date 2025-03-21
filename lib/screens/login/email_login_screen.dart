@@ -19,7 +19,7 @@ class EmailLoginScreen extends StatelessWidget {
       create: (context) => EmailLoginBloc(),
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: ColorRes.themeColor,
+        backgroundColor: const Color.fromARGB(255, 139, 96, 76),
         body: Stack(
           children: [
             Container(
@@ -41,7 +41,7 @@ class EmailLoginScreen extends StatelessWidget {
                         ),
                         Text(
                           AppLocalizations.of(context)!.signInToContinue,
-                          style: kSemiBoldWhiteTextStyle,
+                          style: kSemiBoldTextStyle ,
                         ),
                         const SizedBox(
                           height: 10,
@@ -49,7 +49,7 @@ class EmailLoginScreen extends StatelessWidget {
                         Text(
                           AppLocalizations.of(context)!
                               .findAndBookHairCutMassageSpaWaxingColoringServicesAnytime,
-                          style: kLightWhiteTextStyle,
+                          style: kRegularTextStyle,
                         ),
                         const SizedBox(
                           height: 60,
@@ -57,6 +57,7 @@ class EmailLoginScreen extends StatelessWidget {
                         TextWithTextFieldWidget(
                           title: AppLocalizations.of(context)!.emailAddress,
                           controller: emailLoginBloc.emailTextController,
+                          
                         ),
                         const SizedBox(
                           height: 20,

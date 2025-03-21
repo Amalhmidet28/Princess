@@ -3,10 +3,12 @@ class SalonUser {
     bool? status,
     String? message,
     UserData? data,
+    
   }) {
     _status = status;
     _message = message;
     _data = data;
+    
   }
 
   SalonUser.fromJson(dynamic json) {
@@ -18,6 +20,8 @@ class SalonUser {
   bool? _status;
   String? _message;
   UserData? _data;
+
+  String? profileImage;
 
   SalonUser copyWith({
     bool? status,
@@ -48,7 +52,7 @@ class SalonUser {
 }
 
 class UserData {
-   UserData({
+  UserData({
     num? id,
     num? isBlock,
     String? identity,
@@ -79,6 +83,7 @@ class UserData {
     _fullname = fullname;
     _nickname = nickname;
     _dob = dob;
+    _profileImage = profileImage;
     _email = email;
     _phoneNumber = phoneNumber;
     _country = country;
@@ -147,9 +152,8 @@ class UserData {
   String? _createdAt;
   String? _updatedAt;
   num? _bookingsCount;
-  
 
-   UserData copyWith({
+  UserData copyWith({
     num? id,
     num? isBlock,
     String? identity,
@@ -200,7 +204,7 @@ class UserData {
         bookingsCount: bookingsCount ?? _bookingsCount,
       );
 
- num? get id => _id;
+  num? get id => _id;
   num? get isBlock => _isBlock;
 
   String? get identity => _identity;
@@ -248,7 +252,7 @@ class UserData {
     return ids.contains(serviceID.toString());
   }
 
-   Map<String, dynamic> toJson() {
+  Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
     map['id'] = _id;
     map['is_block'] = _isBlock;

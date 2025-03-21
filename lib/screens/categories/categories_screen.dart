@@ -14,18 +14,17 @@ class CategoriesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final arguments = Get.arguments;
-List<Categories> categories = (arguments is List<Categories>) ? arguments : [];
-
+    List<Categories> categories =
+        (arguments is List<Categories>) ? arguments : [];
 
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Column(
-        children: [
-          ToolBarWidget(
-            title: AppLocalizations.of(context)!.categories,
-          ),
-          Expanded(
-            child: GridView.builder(
+        backgroundColor: Colors.white,
+        body: Column(
+          children: [
+            ToolBarWidget(
+              title: AppLocalizations.of(context)!.categories,
+            ),
+            GridView.builder(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
                 childAspectRatio: 1 / 1.2,
@@ -43,49 +42,52 @@ List<Categories> categories = (arguments is List<Categories>) ? arguments : [];
                       arguments: category,
                     );
                   },
-                  child: Container(
-                    decoration: const BoxDecoration(
-                      color: ColorRes.lavender,
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                    ),
-                    margin: const EdgeInsets.all(2.5),
-                    child: Column(
-                      children: [
-                        const SizedBox(height: 10),
-                        Expanded(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 10),
+                      ClipOval(
+                        // Rend le container circulaire
+                        child: Container(
+                          width: 80, // Taille du cercle
+                          height: 80,
+                          decoration: const BoxDecoration(
+                            color: ColorRes.lavender,
+                            shape: BoxShape.circle, // Rend le fond circulaire
+                          ),
                           child: Padding(
-                            padding: const EdgeInsets.all(22),
+                            padding: const EdgeInsets.all(10),
                             child: AspectRatio(
                               aspectRatio: 1 / 1,
-                              child: FadeInImage.assetNetwork(
-                                image:
-                                    '${ConstRes.itemBaseUrl}${category.icon}',
-                                imageErrorBuilder: errorBuilderForImage,
-                                placeholder: '1',
-                                placeholderErrorBuilder:
-                                    loadingImageTransParent,
+                              child: ClipOval(
+                                // Rend l'image circulaire
+                                child: FadeInImage.assetNetwork(
+                                  image:
+                                      '${ConstRes.itemBaseUrl}${category.icon}',
+                                  imageErrorBuilder: errorBuilderForImage,
+                                  placeholder: '1',
+                                  placeholderErrorBuilder:
+                                      loadingImageTransParent,
+                                  fit: BoxFit.cover, // Ajuste l'image au cercle
+                                ),
                               ),
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 12),
-                          child: Text(
-                            category.title ?? '',
-                            style: kRegularThemeTextStyle.copyWith(
-                              fontSize: 20,
-                            ),
-                          ),
+                      ),
+                      const SizedBox(height: 5),
+                      Text(
+                        category.title ?? '',
+                        textAlign: TextAlign.center,
+                        style: kRegularThemeTextStyle.copyWith(
+                          fontSize: 14,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 );
               },
             ),
-          )
-        ],
-      ),
-    );
+          ],
+        ));
   }
 }

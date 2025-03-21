@@ -54,7 +54,7 @@ class CategoryDetailScreen extends StatelessWidget {
                                                 decoration: const BoxDecoration(
                                                   gradient: LinearGradient(
                                                     colors: [
-                                                      ColorRes.pancho,
+                                                      Color.fromARGB(255, 223, 184, 152),
                                                       ColorRes.fallow
                                                     ],
                                                     begin: Alignment(1, -1),

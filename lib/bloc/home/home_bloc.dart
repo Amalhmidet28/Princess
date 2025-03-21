@@ -13,16 +13,8 @@ part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   HomeBloc() : super(HomeInitial()) {
-    on<FetchHomeDataEvent>((event, emit) async {
-      SharePref sharePref = await SharePref().init();
-      salonUser = sharePref.getSalonUser();
-      homePageData = await ApiService().fetchHomePageData();
-      fetchLocation();
-      emit(HomeDataFoundState(homePageData));
-    });
-    on<FetchNearBySalonEvent>((event, emit) async {
-      emit(HomeDataFoundState(homePageData));
-    });
+    on<FetchHomeDataEvent>(_onFetchHomeDataEvent);
+    on<FetchNearBySalonEvent>(_onFetchNearBySalonEvent);
     add(FetchHomeDataEvent());
   }
 
@@ -30,23 +22,53 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   List<SalonData> salons = [];
   HomePageData? homePageData;
 
-  void fetchLocation() async {
-    await Geolocator.requestPermission()
-        .then((value) {})
-        .onError((error, stackTrace) async {
-      await Geolocator.requestPermission();
-      // SnackBarWidget().snackBarWidget('$error');
-    });
+  Future<void> _onFetchHomeDataEvent(
+      FetchHomeDataEvent event, Emitter<HomeState> emit) async {
+    SharePref sharePref = await SharePref().init();
+    salonUser = sharePref.getSalonUser();
+    homePageData = await ApiService().fetchHomePageData();
 
-    Position position = await Geolocator.getCurrentPosition();
-    AppRes.longitude = position.longitude;
-    AppRes.latitude = position.latitude;
-    SalonByCoordinates salonByCoordinates =
-        await ApiService().fetchSalonByCoordinates(
-      lat: position.latitude.toString(),
-      long: position.longitude.toString(),
-    );
-    salons = salonByCoordinates.data ?? [];
-    add(FetchNearBySalonEvent());
+    await fetchLocation(); // Attendre que la localisation soit récupérée avant d'émettre l'état
+
+    emit(HomeDataFoundState(homePageData));
+  }
+
+  Future<void> _onFetchNearBySalonEvent(
+      FetchNearBySalonEvent event, Emitter<HomeState> emit) async {
+    if (homePageData != null) {
+      homePageData!.nearbySalons = salons;
+    }
+    emit(HomeDataFoundState(homePageData));
+  }
+
+  Future<void> fetchLocation() async {
+    try {
+      LocationPermission permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied ||
+          permission == LocationPermission.deniedForever) {
+        return;
+      }
+
+      Position position = await Geolocator.getCurrentPosition();
+      AppRes.longitude = position.longitude;
+      AppRes.latitude = position.latitude;
+
+      SalonByCoordinates salonByCoordinates =
+          await ApiService().fetchSalonByCoordinates(
+        lat: position.latitude.toString(),
+        long: position.longitude.toString(),
+      );
+
+      salons = salonByCoordinates.data ?? [];
+
+      // Mettre à jour homePageData avec les salons trouvés
+      if (homePageData != null) {
+        homePageData!.nearbySalons = salons;
+      }
+
+      add(FetchNearBySalonEvent()); // Émettre un nouvel événement pour rafraîchir l'UI
+    } catch (e) {
+      print("Erreur lors de la récupération de la localisation: $e");
+    }
   }
 }
