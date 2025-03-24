@@ -59,154 +59,93 @@ class ItemSalon extends StatelessWidget {
           arguments: salonData?.id?.toInt(),
         );
       },
-      child: AspectRatio(
-        aspectRatio: 1 / .4,
-        child: Container(
-          margin: const EdgeInsets.symmetric(vertical: 8),
-          decoration: const BoxDecoration(
-            color: ColorRes.white,
-            boxShadow: [
-              BoxShadow(
-                color: ColorRes.smokeWhite1,
-                offset: Offset(1, 1),
-                blurRadius: 10,
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 6),
+        decoration: BoxDecoration(
+          color: ColorRes.white,
+          boxShadow: const [
+            BoxShadow(
+              color: ColorRes.smokeWhite1,
+              offset: Offset(1, 1),
+              blurRadius: 10,
+            ),
+          ],
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          children: [
+            ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(12),
+                bottomLeft: Radius.circular(12),
               ),
-            ],
-            borderRadius: BorderRadius.all(Radius.circular(15)),
-          ),
-          child: ClipRRect(
-            borderRadius: const BorderRadius.all(Radius.circular(15)),
-            child: Row(
-              children: [
-                AspectRatio(
-                  aspectRatio: 1 / 1,
-                  child: Stack(
-                    children: [
-                      FadeInImage.assetNetwork(
-                        width: double.infinity,
-                        height: double.infinity,
-                        image:
-                            '${ConstRes.itemBaseUrl}${salonData!.images!.isNotEmpty ? (salonData?.images?[0].image ?? '') : ''}',
-                        fit: BoxFit.cover,
-                        imageErrorBuilder: errorBuilderForImage,
-                        placeholderErrorBuilder: loadingImage,
-                        placeholder: '1',
-                      ),
-                      // const Padding(
-                      //   padding:
-                      //       EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                      //   child: Icon(
-                      //     Icons.favorite_rounded,
-                      //     color: ColorRes.bitterSweet,
-                      //     size: 28,
-                      //   ),
-                      // ),
-                    ],
-                  ),
+              child: SizedBox(
+                width: 80, // Reduced image width
+                height: 80, // Reduced image height
+                child: FadeInImage.assetNetwork(
+                  image: '${ConstRes.itemBaseUrl}${salonData!.images!.isNotEmpty ? (salonData?.images?[0].image ?? '') : ''}',
+                  fit: BoxFit.cover,
+                  imageErrorBuilder: errorBuilderForImage,
+                  placeholderErrorBuilder: loadingImage,
+                  placeholder: '1',
                 ),
-                Expanded(
-                  child: Container(
-                    color: ColorRes.white,
-                    padding: const EdgeInsets.only(
-                      top: 5,
-                      bottom: 5,
-                      right: 10,
-                      left: 10,
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      salonData?.salonName ?? '',
+                      style: kSemiBoldTextStyle.copyWith(
+                        color: ColorRes.nero,
+                        fontSize: 16,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
+                    const SizedBox(height: 4),
+                    Text(
+                      salonData?.salonAddress ?? '',
+                      style: kThinWhiteTextStyle.copyWith(
+                        color: ColorRes.empress,
+                        fontSize: 14,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
                       children: [
+                        Icon(
+                          Icons.star_rounded,
+                          color: ColorRes.pumpkin,
+                          size: 18,
+                        ),
+                        const SizedBox(width: 4),
                         Text(
-                          '${salonData?.getCatInString()}',
+                          salonData?.rating?.toStringAsFixed(1) ?? '0.0',
                           style: kRegularTextStyle.copyWith(
-                            color: ColorRes.themeColor,
-                            fontSize: 12,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          salonData?.salonName ?? '',
-                          style: kSemiBoldTextStyle.copyWith(
-                            color: ColorRes.nero,
-                            fontSize: 16,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(
-                          height: 5,
-                        ),
-                        Text(
-                          salonData?.salonAddress ?? '',
-                          style: kThinWhiteTextStyle.copyWith(
-                            color: ColorRes.empress,
+                            color: ColorRes.pumpkin,
                             fontSize: 14,
                           ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
                         ),
-                        const SizedBox(
-                          height: 10,
-                        ),
-                        Row(
-                          children: [
-                            Visibility(
-                              visible: true,
-                              child: Container(
-                                decoration: const BoxDecoration(
-                                  color: ColorRes.pumpkin15,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(500)),
-                                ),
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8,
-                                  vertical: 5,
-                                ),
-                                child: Row(
-                                  children: [
-                                    Text(
-                                      salonData?.rating?.toStringAsFixed(1) ??
-                                          '',
-                                      style: kRegularTextStyle.copyWith(
-                                        color: ColorRes.pumpkin,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 5,
-                                    ),
-                                    const Icon(
-                                      Icons.star_rounded,
-                                      color: ColorRes.pumpkin,
-                                      size: 19,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              '${AppRes.calculateDistance(double.parse(salonData?.salonLat ?? '0'), double.parse(salonData?.salonLong ?? '0'))} km',
-                              style: kThinWhiteTextStyle.copyWith(
-                                color: ColorRes.mortar,
-                              ),
-                            ),
-                          ],
+                        const Spacer(),
+                        Text(
+                          '${AppRes.calculateDistance(double.parse(salonData?.salonLat ?? '0'), double.parse(salonData?.salonLong ?? '0'))} km away',
+                          style: kThinWhiteTextStyle.copyWith(
+                            color: ColorRes.mortar,
+                          ),
                         ),
                       ],
                     ),
-                  ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

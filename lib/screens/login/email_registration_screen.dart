@@ -236,8 +236,8 @@ ElevatedButton(
 }
 
 extension on AppLocalizations {
+  // ignore: unused_element
   String get rememberMe => rememberMe;
-  String get googleSignIn => 'Continue with Google';
 }
 
 class TextWithTextFieldSmokeWhiteWidget extends StatelessWidget {

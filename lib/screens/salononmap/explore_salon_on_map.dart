@@ -11,7 +11,9 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class SalonOnMapScreen extends StatelessWidget {
-  const SalonOnMapScreen({super.key});
+  const SalonOnMapScreen({super.key, required this.onMenuClick});
+
+  final void Function() onMenuClick;
 
   @override
   Widget build(BuildContext context) {
@@ -23,12 +25,7 @@ class SalonOnMapScreen extends StatelessWidget {
             SalonOnMapBloc salonOnMapBloc = context.read<SalonOnMapBloc>();
             return Stack(
               children: [
-                Visibility(
-                  visible: true,
-                  child: Column(
-                    children: salonOnMapBloc.widgets,
-                  ),
-                ),
+                // Google Map Widget
                 SizedBox(
                   height: Get.height,
                   width: Get.width,
@@ -39,21 +36,30 @@ class SalonOnMapScreen extends StatelessWidget {
                       salonOnMapBloc.mapController = controller;
                       salonOnMapBloc.onMapCreated(controller);
                       salonOnMapBloc.manager.setMapId(controller.mapId);
+                      print("Google Map initialized.");
                     },
-                    mapToolbarEnabled: false,
+                    markers: salonOnMapBloc.marker.isNotEmpty
+                        ? salonOnMapBloc.marker
+                        : {
+                            Marker(
+                              markerId: MarkerId("default"),
+                              position: LatLng(37.7749, -122.4194), // Default
+                            ),
+                          },
+                    zoomControlsEnabled: false,
+                    myLocationButtonEnabled: true,
+                    initialCameraPosition: CameraPosition(
+                      target: salonOnMapBloc.center.isNotEmpty
+                          ? salonOnMapBloc.center
+                          : LatLng(37.7749, -122.4194),
+                      zoom: 15.0,
+                    ),
                     onCameraMove: salonOnMapBloc.manager.onCameraMove,
                     onCameraIdle: salonOnMapBloc.manager.updateMap,
-                    markers: salonOnMapBloc.marker,
-                    zoomControlsEnabled: false,
-                    compassEnabled: false,
-                    myLocationButtonEnabled: false,
-                    indoorViewEnabled: true,
-                    initialCameraPosition: CameraPosition(
-                      target: salonOnMapBloc.center,
-                      zoom: 15.4746,
-                    ),
                   ),
                 ),
+
+                // PageView with Salon Details
                 Positioned(
                   bottom: 0,
                   left: 0,
@@ -77,7 +83,6 @@ class SalonOnMapScreen extends StatelessWidget {
                             );
                           }
                         },
-                        allowImplicitScrolling: true,
                         itemCount: salonOnMapBloc.salons.length,
                         itemBuilder: (context, index) {
                           SalonData salonData = salonOnMapBloc.salons[index];
@@ -93,15 +98,15 @@ class SalonOnMapScreen extends StatelessWidget {
                     ),
                   ),
                 ),
+
+                // Back Button and Filters
                 SafeArea(
                   bottom: false,
                   child: SizedBox(
                     height: 50,
                     child: Row(
                       children: [
-                        const SizedBox(
-                          width: 15,
-                        ),
+                        const SizedBox(width: 15),
                         CustomCircularInkWell(
                           onTap: () {
                             Get.back();
@@ -110,21 +115,13 @@ class SalonOnMapScreen extends StatelessWidget {
                             height: 45,
                             width: 45,
                             decoration: const BoxDecoration(
-                                color: ColorRes.themeColor,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(100))),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 10),
-                            child: const Image(
-                              image: AssetImage(AssetRes.icBack),
-                              height: 30,
-                              color: ColorRes.white,
+                              color: ColorRes.themeColor,
+                              borderRadius: BorderRadius.all(Radius.circular(100)),
                             ),
+                            child: const Icon(Icons.arrow_back, color: ColorRes.white),
                           ),
                         ),
-                        const SizedBox(
-                          width: 15,
-                        ),
+                        const SizedBox(width: 15),
                         const CategoriesFilterMapWidget(),
                       ],
                     ),
@@ -139,12 +136,15 @@ class SalonOnMapScreen extends StatelessWidget {
   }
 }
 
+extension LatLngExtensions on LatLng {
+  bool get isNotEmpty => latitude != 0.0 || longitude != 0.0;
+}
+
 class CategoriesFilterMapWidget extends StatefulWidget {
   const CategoriesFilterMapWidget({super.key});
 
   @override
-  State<CategoriesFilterMapWidget> createState() =>
-      _CategoriesFilterMapWidgetState();
+  State<CategoriesFilterMapWidget> createState() => _CategoriesFilterMapWidgetState();
 }
 
 class _CategoriesFilterMapWidgetState extends State<CategoriesFilterMapWidget> {
@@ -166,7 +166,6 @@ class _CategoriesFilterMapWidgetState extends State<CategoriesFilterMapWidget> {
               padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
               scrollDirection: Axis.horizontal,
               shrinkWrap: true,
-              primary: true,
               children: List<Widget>.generate(
                 salonOnMapBloc.categories.length,
                 (index) => ItemFilterWidget(

@@ -109,6 +109,10 @@ class SalonData {
 
   var services;
 
+  var website;
+
+  var longitude;
+
   SalonData({
     num? id,
     num? wallet,
@@ -444,6 +448,8 @@ class SalonData {
   List<ReviewData>? get reviews => _reviews;
 
   BankAccount? get bankAccount => _bankAccount;
+
+  get latitude => null;
 
  
 

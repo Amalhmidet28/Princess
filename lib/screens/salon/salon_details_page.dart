@@ -64,13 +64,13 @@ class SalonDetailsPage extends StatelessWidget {
                   ],
                 ),
                 const Spacer(),
-                RoundCornerWithImageWidget(
-                  image: AssetRes.icCall,
-                  onTap: () {
-                    launchUrl(Uri.parse(
-                        'tel:${salonDetailsBloc.salonData?.salonPhone}'));
-                  },
-                ),
+                // RoundCornerWithImageWidget(
+                //   image: AssetRes.icCall,
+                //   onTap: () {
+                //     launchUrl(Uri.parse(
+                //         'tel:${salonDetailsBloc.salonData?.salonPhone}'));
+                //   },
+                // ),
                 const SizedBox(
                   width: 15,
                 ),

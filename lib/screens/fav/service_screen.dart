@@ -70,10 +70,10 @@ class ItemService extends StatelessWidget {
                 blurRadius: 10,
               ),
             ],
-            borderRadius: BorderRadius.all(Radius.circular(15)),
+            borderRadius: BorderRadius.all(Radius.circular(12)),
           ),
           child: ClipRRect(
-            borderRadius: const BorderRadius.all(Radius.circular(15)),
+            borderRadius: const BorderRadius.all(Radius.circular(12)),
             child: Row(
               children: [
                 AspectRatio(
@@ -81,8 +81,8 @@ class ItemService extends StatelessWidget {
                   child: Stack(
                     children: [
                       FadeInImage.assetNetwork(
-                        width: double.infinity,
-                        height: double.infinity,
+                        width: 80,
+                        height: 80,
                         image:
                             '${ConstRes.itemBaseUrl}${services!.images!.isNotEmpty ? services?.images?.first.image : ''}',
                         fit: BoxFit.cover,

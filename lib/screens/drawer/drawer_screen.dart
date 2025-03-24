@@ -31,16 +31,16 @@ class DrawerScreen extends StatelessWidget {
       child: Column(
         children: [
           const TopBarDrawerWidget(),
-          DrawerMenuWidget(
-            image: AssetRes.icLocation,
-            title: AppLocalizations.of(context)!.exploreSalonsOnMap,
-            imagePadding: 2,
-            onTap: () {
-              Get.to(
-                () => const SalonOnMapScreen(),
-              );
-            },
-          ),
+          // DrawerMenuWidget(
+          //   image: AssetRes.icLocation,
+          //   title: AppLocalizations.of(context)!.exploreSalonsOnMap,
+          //   imagePadding: 2,
+          //   onTap: () {
+          //     Get.to(
+          //       () => const SalonOnMapScreen(),
+          //     );
+          //   },
+          // ),
           DrawerMenuWidget(
             image: AssetRes.icLanguage,
             title: AppLocalizations.of(context)!.changeLanguage,

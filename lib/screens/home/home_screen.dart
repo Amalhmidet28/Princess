@@ -28,7 +28,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String selectedCategory = 'All'; 
+  String selectedCategory = 'All';
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           Image.asset('asset/artwork.png', height: 30),
                           const Spacer(),
                           _iconButton(AssetRes.icfav,
-                              () => Get.to(() => FavouriteScreen())),
+                              () => Get.to(() => FavouriteScreen(homePageData: null,))),
                           const SizedBox(width: 15),
                           _iconButton(AssetRes.icNotification,
                               () => Get.to(() => const NotificationScreen())),

@@ -7,12 +7,13 @@ class AssetRes {
   static const String icMenu = 'images/ic_menu.png';
   static const String icNotification = 'images/n.png';
   static const String icSearch = 'images/ic_search.png';
-  static const String icBooking = 'images/ic_booking.png';
+  static const String icBooking = 'images/Booking.png';
   static const String icfav = 'asset/Bookmark.png'; 
   static const String icChat = 'images/ic_chat.png';
   static const String icFav = 'images/ic_fav.png';
-  static const String icHome = 'images/ic_home.png';
-  static const String icProfile = 'images/ic_profile.png';
+   static const String icExplore = 'images/Explore.png';
+  static const String icHome = 'images/Home.png';
+  static const String icProfile = 'images/Profile.png';
   static const String icPoster = 'images/ic_poster.png';
   static const String icColoring = 'images/ic_coloring.png';
   static const String icFacial = 'images/ic_facial.png';

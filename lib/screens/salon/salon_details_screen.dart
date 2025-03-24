@@ -22,6 +22,7 @@ import 'package:flutter_branch_sdk/flutter_branch_sdk.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SalonDetailsScreen extends StatefulWidget {
   const SalonDetailsScreen({super.key});
@@ -38,6 +39,7 @@ class _SalonDetailsScreenState extends State<SalonDetailsScreen> {
 
   @override
   void initState() {
+    super.initState();
     scrollController.addListener(() {
       toolbarIsExpand = !(scrollController.offset >=
           scrollController.position.maxScrollExtent - 120);
@@ -49,73 +51,123 @@ class _SalonDetailsScreenState extends State<SalonDetailsScreen> {
         setState(() {});
       }
     });
-    super.initState();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => SalonDetailsBloc(),
-      child: Scaffold(
-        body: BlocBuilder<SalonDetailsBloc, SalonDetailsState>(
-          builder: (context, state) {
-            SalonDetailsBloc salonDetailsBloc =
-                context.read<SalonDetailsBloc>();
-            return state is SalonDataFetched
-                ? NestedScrollView(
-                    controller: scrollController,
-                    headerSliverBuilder: (context, innerBoxIsScrolled) {
-                      return [
-                        TopBarOfSalonDetails(
-                          toolbarIsExpand: toolbarIsExpand,
-                          salonData: state.salon.data,
-                          userData: salonDetailsBloc.userData,
-                        ),
-                      ];
-                    },
-                    physics: const NeverScrollableScrollPhysics(),
-                    body: SafeArea(
-                      top: false,
-                      child: Column(
+ @override
+Widget build(BuildContext context) {
+  return BlocProvider(
+    create: (context) => SalonDetailsBloc(),
+    child: Scaffold(
+      body: BlocBuilder<SalonDetailsBloc, SalonDetailsState>(
+        builder: (context, state) {
+          if (state is SalonDataFetched) {
+            final salonDetailsBloc = context.read<SalonDetailsBloc>(); // ✅ Correctly access the bloc instance
+
+            return NestedScrollView(
+              controller: scrollController,
+              headerSliverBuilder: (context, innerBoxIsScrolled) {
+                return [
+                  TopBarOfSalonDetails(
+                    toolbarIsExpand: toolbarIsExpand,
+                    salonData: state.salon.data,
+                    userData: salonDetailsBloc.userData, // ✅ Access bloc data properly
+                  ),
+                ];
+              },
+              body: SafeArea(
+                top: false,
+                child: Column(
+                  children: [
+                    SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        _buildIconButton(Icons.language, 'Website', () {
+                          String websiteUrl = state.salon.data?.website ?? 'https://example.com';
+                          launchUrl(Uri.parse(websiteUrl), mode: LaunchMode.externalApplication);
+                        }),
+                        
+                        _buildIconButton(Icons.message, 'Message', () {
+                          String phone = state.salon.data?.salonPhone ?? '';
+                          launchUrl(Uri.parse('sms:$phone'), mode: LaunchMode.externalApplication);
+                        }),
+
+                        _buildIconButton(Icons.phone, 'Call', () {
+                          String phone = state.salon.data?.salonPhone ?? '';
+                          launchUrl(Uri.parse('tel:$phone'), mode: LaunchMode.externalApplication);
+                        }),
+
+                        _buildIconButton(Icons.location_on, 'Direction', () {
+                          String lat = state.salon.data?.latitude ?? '0';
+                          String lng = state.salon.data?.longitude ?? '0';
+                          String googleMapsUrl = 'https://www.google.com/maps/search/?api=1&query=$lat,$lng';
+                          launchUrl(Uri.parse(googleMapsUrl), mode: LaunchMode.externalApplication);
+                        }),
+
+                        _buildIconButton(Icons.share, 'Share', () {
+                          String salonName = state.salon.data?.salonName ?? 'Salon';
+                          String websiteUrl = state.salon.data?.website ?? 'https://example.com';
+                          Share.share('Check out $salonName: $websiteUrl');
+                        }),
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                    TabBarOfSalonDetailWidget(
+                      onTabChange: (selectedIndex) {
+                        pageController.jumpToPage(selectedIndex);
+                      },
+                    ),
+                    Expanded(
+                      child: PageView(
+                        controller: pageController,
+                        physics: const NeverScrollableScrollPhysics(),
                         children: [
-                          Container(
-                            height: toolbarIsExpand
-                                ? 0
-                                : MediaQuery.of(context).viewPadding.top +
-                                    kToolbarHeight,
-                          ),
-                          TabBarOfSalonDetailWidget(
-                            onTabChange: (selectedIndex) {
-                              pageController.jumpToPage(selectedIndex);
-                            },
-                          ),
-                          
-                          Expanded(
-                            child: PageView(
-                              controller: pageController,
-                              physics: const NeverScrollableScrollPhysics(),
-                              children: [
-                                const SalonDetailsPage(),
-                                const SalonServicesPage(),
-                                const SalonGalleryPage(),
-                                const SalonStaffPage(),
-                                SalonReviewsPage(
-                                  salonData: salonDetailsBloc.salonData,
-                                ),
-                                const SalonAwardsPage(),
-                              ],
-                            ),
-                          ),
+                          SalonDetailsPage(),
+                          SalonServicesPage(),
+                          SalonGalleryPage(),
+                          SalonStaffPage(),
+                          SalonReviewsPage(salonData: state.salon.data),
+                          SalonAwardsPage(),
                         ],
                       ),
                     ),
-                  )
-                : const LoadingImage();
-          },
+                  ],
+                ),
+              ),
+            );
+          } else {
+            return const LoadingImage(); // Handle loading state
+          }
+        },
+      ),
+    ),
+  );
+}
+
+  // Helper method to build an icon button with label
+  Widget _buildIconButton(IconData icon, String label, VoidCallback onTap) {
+  return Column(
+    children: [
+      Container(
+        padding: EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: const Color.fromARGB(255, 254, 242, 224), // Light beige background
+          borderRadius: BorderRadius.circular(120), // Rounded corners
+        ),
+        child: IconButton(
+          icon: Icon(icon, color: ColorRes.themeColor), // Brown color for icon
+          onPressed: onTap, // Action callback
         ),
       ),
-    );
-  }
+      SizedBox(height: 5), // Space between icon and label
+      Text(
+        label,
+        style: TextStyle(fontSize: 12, color: Colors.black), // Text color
+      ),
+    ],
+  );
+}
+
 }
 
 class TabBarOfSalonDetailWidget extends StatefulWidget {
@@ -544,7 +596,14 @@ class _ToggleImageWidgetState extends State<ToggleImageWidget> {
           return;
         }
         ApiService()
-            .editUserDetails(favouriteSalons: widget.salonData?.id?.toString(), nickname: '', dob: '', email: '', address: '', gender: '', country: '')
+            .editUserDetails(
+                favouriteSalons: widget.salonData?.id?.toString(),
+                nickname: '',
+                dob: '',
+                email: '',
+                address: '',
+                gender: '',
+                country: '')
             .then((value) {
           isFav = !isFav;
           setState(() {});
@@ -561,7 +620,6 @@ class _ToggleImageWidgetState extends State<ToggleImageWidget> {
     );
   }
 }
-
 
 class PageIndicator extends StatefulWidget {
   const PageIndicator({

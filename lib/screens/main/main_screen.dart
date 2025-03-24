@@ -6,6 +6,7 @@ import 'package:cutfx/screens/fav/favourite_screen.dart';
 import 'package:cutfx/screens/home/home_screen.dart';
 import 'package:cutfx/screens/message/message_screen.dart';
 import 'package:cutfx/screens/profile/profile_screen.dart';
+import 'package:cutfx/screens/salononmap/explore_salon_on_map.dart';
 import 'package:cutfx/utils/asset_res.dart';
 import 'package:cutfx/utils/color_res.dart';
 import 'package:cutfx/utils/custom/custom_widget.dart';
@@ -41,15 +42,15 @@ class MainScreen extends StatelessWidget {
                   HomeScreen(
                      onMenuClick: _openDrawer,
                   ),
-                  FavouriteScreen(
+                  SalonOnMapScreen(
                     onMenuClick: _openDrawer,
                   ),
                   MyBookingScreen(
                     onMenuClick: _openDrawer,
                   ),
-                  MessageScreen(
-                    onMenuClick: _openDrawer,
-                  ),
+                  // MessageScreen(
+                  //   onMenuClick: _openDrawer,
+                  // ),
                   ProfileScreen(
                     onMenuClick: _openDrawer,
                   ),
@@ -94,10 +95,10 @@ class MainScreen extends StatelessWidget {
                         ),
                         const Spacer(),
                         BottomMenuItem(
-                          image: AssetRes.icFav,
+                          image: AssetRes.icExplore ,
                           imageSize: 22,
                           menuIsSelected: selectedIndex == 1,
-                          title: AppLocalizations.of(context)!.favourite,
+                          title: AppLocalizations.of(context)!.explore,
                           onTap: () {
                             mainScreenBloc.onMenuClickEvent(1);
                           },
@@ -115,16 +116,16 @@ class MainScreen extends StatelessWidget {
                           },
                         ),
                         const Spacer(),
-                        BottomMenuItem(
-                          image: AssetRes.icChat,
-                          imageSize: 20,
-                          menuIsSelected: selectedIndex == 3,
-                          title: AppLocalizations.of(context)!.messages,
-                          nonSelectedImageSize: 20,
-                          onTap: () {
-                            mainScreenBloc.onMenuClickEvent(3);
-                          },
-                        ),
+                        // BottomMenuItem(
+                        //   image: AssetRes.icChat,
+                        //   imageSize: 20,
+                        //   menuIsSelected: selectedIndex == 3,
+                        //   title: AppLocalizations.of(context)!.messages,
+                        //   nonSelectedImageSize: 20,
+                        //   onTap: () {
+                        //     mainScreenBloc.onMenuClickEvent(3);
+                        //   },
+                        // ),
                         const Spacer(),
                         BottomMenuItem(
                           image: AssetRes.icProfile,

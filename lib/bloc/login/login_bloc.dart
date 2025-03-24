@@ -70,4 +70,6 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     }
     return null;
   }
+
+  void _handleSignInWithGoogle() {}
 }

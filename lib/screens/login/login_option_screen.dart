@@ -36,37 +36,39 @@ class LoginOptionScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                         
-                const Spacer(),
+                            const Spacer(),
 
-                // 🔹 Logo & Title
-                Center(
-                  child: Column(
-                    children: [
-                      Image.asset(
-                        'asset/artwork.png', 
-                        width: 300,
-                        height: 150,
-                        fit: BoxFit.contain, 
-                      ),
-                      const SizedBox(height: 20),
-                      const AppLogo(textSize: 30, width: 15, height: 15),
-                      const SizedBox(height: 10),
-                      Text(
-                  "Let's you in",
-                  style: TextStyle(
-                    fontSize: 48,
-                    fontFamily: 'RecklessNeue', 
-                    fontWeight: FontWeight.bold,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                    ],
-                  ),
-                ),
+                            // 🔹 Logo & Title
+                            Center(
+                              child: Column(
+                                children: [
+                                  Image.asset(
+                                    'asset/artwork.png',
+                                    width: 300,
+                                    height: 150,
+                                    fit: BoxFit.contain,
+                                  ),
+                                  const SizedBox(height: 20),
+                                  const AppLogo(
+                                      textSize: 30, width: 15, height: 15),
+                                  const SizedBox(height: 10),
+                                  Text(
+                                    "Let's you in",
+                                    style: TextStyle(
+                                      fontSize: 48,
+                                      fontFamily: 'RecklessNeue',
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ),
+                            ),
 
                             const AppLogo(
-                              textSize: 30, width: 10, height: 10,
+                              textSize: 30,
+                              width: 10,
+                              height: 10,
                             ),
                             Text(
                               AppLocalizations.of(context)!.signInToContinue,
@@ -104,75 +106,87 @@ class LoginOptionScreen extends StatelessWidget {
                               text: AppLocalizations.of(context)!
                                   .signInWithGoogle,
                               iconPadding: 8,
-                              onPressed: () {
-                                context
-                                    .read<LoginBloc>()
-                                    .add(LoginClickEvent(1));
+                              onPressed: () async {
+                                try {
+                                  context
+                                      .read<LoginBloc>()
+                                      .add(LoginClickEvent(1));
+                                } catch (e) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        content: Text(
+                                            'Error during Google sign-in: $e')),
+                                  );
+                                }
                               },
-                            ),  Expanded(child: SizedBox()),
+                            ),
+                            Expanded(child: SizedBox()),
 
-                            const SizedBox(height: 30), 
-Row(
-                  children: [
-                    const Expanded(
-                      child: Divider(
-                        color: Colors.grey,
-                        thickness: 1,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Text(
-                        'or',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontFamily: 'Figtree',
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                    const Expanded(
-                      child: Divider(
-                        color: Colors.grey,
-                        thickness: 1,
-                      ),
-                    ),
-                  ],
-                ),
+                            const SizedBox(height: 30),
+                            Row(
+                              children: [
+                                const Expanded(
+                                  child: Divider(
+                                    color: Colors.grey,
+                                    thickness: 1,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10),
+                                  child: Text(
+                                    'or',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontFamily: 'Figtree',
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                                const Expanded(
+                                  child: Divider(
+                                    color: Colors.grey,
+                                    thickness: 1,
+                                  ),
+                                ),
+                              ],
+                            ),
 
-                const SizedBox(height: 20),
+                            const SizedBox(height: 20),
 
-                // 🔹 Sign in with password
-                SizedBox(
-                  width: double.infinity,
-                  height: 50,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF9B6A5A), // Marron
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(100),
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const EmailLoginScreen(),
-                        ),
-                      );
-                    },
-                    child: const Text(
-                      'Sign in with password',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ), Expanded(child: SizedBox()),
-
+                            // 🔹 Sign in with password
+                            SizedBox(
+                              width: double.infinity,
+                              height: 50,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      const Color(0xFF9B6A5A), // Marron
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(100),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const EmailLoginScreen(),
+                                    ),
+                                  );
+                                },
+                                child: const Text(
+                                  'Sign in with password',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(child: SizedBox()),
                           ],
                         ),
                       ),
