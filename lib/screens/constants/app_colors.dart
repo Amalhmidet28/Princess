@@ -16,4 +16,12 @@ class AppColors {
   static var logoGradient1;
 
   static var logoGradient2;
+
+  static var text;
+
+  static var textTertiary;
+
+  static var textSecondary;
+
+  static var primary;
 }

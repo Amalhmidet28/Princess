@@ -27,14 +27,11 @@ class NearBySalonBloc extends Bloc<NearBySalonEvent, NearBySalonState> {
       String keyword = nearBySalonEditingController.text;
       salons = [];
       for (SalonData salonData in duplicateSalons) {
-        if ((salonData.salonName?.toLowerCase() ?? '')
-                .contains(keyword.toLowerCase()) ||
-            (salonData.salonAddress?.toLowerCase() ?? '')
-                .contains(keyword.toLowerCase()) ||
-            (salonData.getCatInString().toLowerCase())
-                .contains(keyword.toLowerCase())) {
-          salons.add(salonData);
-        }
+        if ((salonData.salonName?.toLowerCase() ?? '').contains(keyword.toLowerCase()) ||
+    (salonData.salonAddress?.toLowerCase() ?? '').contains(keyword.toLowerCase()) ||
+    (salonData.getCatInString().toLowerCase()).contains(keyword.toLowerCase())) {
+  salons.add(salonData);
+}
       }
       add(UpdateDataNearBySalonEvent());
     });

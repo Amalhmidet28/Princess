@@ -62,7 +62,7 @@ class NearBySalonScreen extends StatelessWidget {
 class TopBarOfTopRatedWidget extends StatelessWidget {
   const TopBarOfTopRatedWidget({
     super.key,
-  });
+  }); 
 
   @override
   Widget build(BuildContext context) {

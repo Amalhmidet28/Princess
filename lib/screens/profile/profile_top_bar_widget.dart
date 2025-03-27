@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cutfx/bloc/confirmbooking/payment_gateway.dart';
 import 'package:cutfx/bloc/profile/profile_bloc.dart';
 import 'package:cutfx/model/user/salon_user.dart';
@@ -36,7 +37,7 @@ class _ProfileTopBarWidgetState extends State<ProfileTopBarWidget> {
   @override
   void initState() {
     super.initState();
-    salonUser = widget.salonUser;  // Initialize salonUser to reflect the initial data.
+    salonUser = widget.salonUser; // Initialize salonUser to reflect the initial data.
   }
 
   @override
@@ -55,11 +56,11 @@ class _ProfileTopBarWidgetState extends State<ProfileTopBarWidget> {
                   alignment: Alignment.centerLeft,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(left: 2), 
+                      padding: const EdgeInsets.only(left: 2),
                       child: Image.asset('asset/artwork.png', height: 30),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 35), 
+                      padding: const EdgeInsets.only(left: 35),
                       child: Text(
                         AppLocalizations.of(context)!.profile,
                         style: kLightWhiteTextStyle.copyWith(
@@ -91,11 +92,11 @@ class _ProfileTopBarWidgetState extends State<ProfileTopBarWidget> {
                     children: [
                       // Profile Picture
                       CircleAvatar(
-                        radius: 50,
-                        backgroundImage: (salonUser?.profileImage ?? '').isNotEmpty
-                            ? NetworkImage(salonUser!.profileImage!)
-                            : const AssetImage("assets/default_profile.png") as ImageProvider,
-                      ),
+  radius: 50,
+  backgroundImage: salonUser?.profileImage?.isNotEmpty == true
+      ? CachedNetworkImageProvider(salonUser!.profileImage!) // Cache and display image
+      : const AssetImage("assets/default_profile.png") as ImageProvider,
+),
                       // Edit Icon
                       Positioned(
                         right: 4,
@@ -153,7 +154,8 @@ class _ProfileTopBarWidgetState extends State<ProfileTopBarWidget> {
                         borderRadius: BorderRadius.all(Radius.circular(100)),
                       ),
                       margin: const EdgeInsets.only(top: 10),
-                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 8),
                       child: Center(
                         child: Text('Edit Details'),
                       ),
@@ -210,13 +212,14 @@ class _ProfileTopBarWidgetState extends State<ProfileTopBarWidget> {
 
   // Uploads the image to the server
   Future<void> _uploadProfilePicture(String filePath) async {
-    // Implement image upload API call here
+    // Assuming you've uploaded the image to the server and received a URL or path
+    String uploadedImageUrl = "http://147.93.95.69:8000/storage/your_image.jpg"; // Replace with your server's actual image path
 
     // After the image is uploaded, update the salonUser object
     setState(() {
-      salonUser!.profileImage = filePath; // Update the profile image URL
+      salonUser!.profileImage = uploadedImageUrl; // Update the profile image URL
     });
 
-    print("Uploading image: $filePath");
+    print("Uploaded image: $uploadedImageUrl");
   }
 }

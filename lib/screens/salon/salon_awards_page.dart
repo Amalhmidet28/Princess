@@ -25,50 +25,50 @@ class SalonAwardsPage extends StatelessWidget {
           color: ColorRes.smokeWhite,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const RoundCornerWithImageWidget(
-                image: AssetRes.icAwards,
-                cornerRadius: 10,
-                imagePadding: 7,
-                bgColor: ColorRes.smokeWhite1,
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      awards?.title ?? '',
-                      style: kSemiBoldTextStyle.copyWith(
-                        fontSize: 16,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      'By ${awards?.awardBy ?? ''}',
-                      style: kLightWhiteTextStyle.copyWith(
-                        color: ColorRes.themeColor,
-                        fontSize: 14,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    Text(
-                      awards?.description ?? '',
-                      style: kLightWhiteTextStyle.copyWith(
-                        color: ColorRes.empress,
-                        fontSize: 15,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
+            // children: [
+            //   const RoundCornerWithImageWidget(
+            //     image: AssetRes.icAwards,
+            //     cornerRadius: 10,
+            //     imagePadding: 7,
+            //     bgColor: ColorRes.smokeWhite1,
+            //   ),
+            //   const SizedBox(
+            //     width: 10,
+            //   ),
+            //   Expanded(
+            //     child: Column(
+            //       crossAxisAlignment: CrossAxisAlignment.start,
+            //       children: [
+            //         Text(
+            //           awards?.title ?? '',
+            //           style: kSemiBoldTextStyle.copyWith(
+            //             fontSize: 16,
+            //           ),
+            //         ),
+            //         const SizedBox(
+            //           height: 5,
+            //         ),
+            //         Text(
+            //           'By ${awards?.awardBy ?? ''}',
+            //           style: kLightWhiteTextStyle.copyWith(
+            //             color: ColorRes.themeColor,
+            //             fontSize: 14,
+            //           ),
+            //         ),
+            //         const SizedBox(
+            //           height: 5,
+            //         ),
+            //         Text(
+            //           awards?.description ?? '',
+            //           style: kLightWhiteTextStyle.copyWith(
+            //             color: ColorRes.empress,
+            //             fontSize: 15,
+            //           ),
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ],
           ),
         );
       },

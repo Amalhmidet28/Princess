@@ -113,6 +113,8 @@ class SalonData {
 
   var longitude;
 
+
+
   SalonData({
     num? id,
     num? wallet,

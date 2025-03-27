@@ -1,4 +1,5 @@
 import 'package:cutfx/model/chat/chat.dart';
+import 'package:cutfx/model/staff/staff.dart';
 import 'package:cutfx/model/user/salon.dart';
 import 'package:cutfx/model/user/salon_user.dart';
 import 'package:cutfx/screens/chat/chat_screen.dart';

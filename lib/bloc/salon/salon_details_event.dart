@@ -5,3 +5,6 @@ abstract class SalonDetailsEvent {}
 class FetchSalonDataEvent extends SalonDetailsEvent {
   FetchSalonDataEvent();
 }
+
+
+class FetchSalonStaffEvent extends SalonDetailsEvent {}

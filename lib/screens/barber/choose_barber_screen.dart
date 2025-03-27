@@ -12,7 +12,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 
 class ChooseBarberScreen extends StatelessWidget {
-  const ChooseBarberScreen({super.key});
+  const ChooseBarberScreen({super.key, required StaffData staffData});
 
   @override
   Widget build(BuildContext context) {

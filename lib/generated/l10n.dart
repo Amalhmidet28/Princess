@@ -791,6 +791,14 @@ class S {
       args: [],
     );
   }
+  String get seeOnMaps {
+  return Intl.message(
+    'See on Maps',
+    name: 'seeOnMaps',
+    desc: 'Text for the navigate to map button',
+  );
+}
+
 
   /// `Navigate`
   String get navigate {

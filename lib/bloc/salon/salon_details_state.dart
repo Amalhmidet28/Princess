@@ -9,3 +9,9 @@ class SalonDataFetched extends SalonDetailsState {
 
   SalonDataFetched(this.salon);
 }
+class SalonDataError extends SalonDetailsState {
+  final String errorMessage;
+  SalonDataError({required this.errorMessage});
+}
+
+class SalonDetailsLoading extends SalonDetailsState {}

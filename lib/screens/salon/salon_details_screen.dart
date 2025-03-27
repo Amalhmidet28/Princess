@@ -1,6 +1,8 @@
 import 'package:cutfx/bloc/salon/salon_details_bloc.dart';
+import 'package:cutfx/model/staff/staff.dart';
 import 'package:cutfx/model/user/salon.dart';
 import 'package:cutfx/model/user/salon_user.dart';
+import 'package:cutfx/screens/barber/choose_barber_screen.dart';
 import 'package:cutfx/screens/login/login_option_screen.dart';
 import 'package:cutfx/screens/main/main_screen.dart';
 import 'package:cutfx/screens/salon/salon_awards_page.dart';
@@ -60,6 +62,12 @@ Widget build(BuildContext context) {
     child: Scaffold(
       body: BlocBuilder<SalonDetailsBloc, SalonDetailsState>(
         builder: (context, state) {
+          if (state is SalonDetailsLoading) {
+      return Center(child: CircularProgressIndicator(color: ColorRes.themeColor));
+      
+    }if (state is SalonDataError) {
+      return Center(child: Text(state.errorMessage, style: TextStyle(color: Colors.red)));
+    }
           if (state is SalonDataFetched) {
             final salonDetailsBloc = context.read<SalonDetailsBloc>(); // ✅ Correctly access the bloc instance
 
@@ -111,12 +119,50 @@ Widget build(BuildContext context) {
                         }),
                       ],
                     ),
-                    SizedBox(height: 20),
+                     SizedBox(height: 20),
+
+    // Our Specialists Section
+    Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Text(
+        "Our Specialists",
+        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      ),
+    ),
+    SizedBox(height: 10),
+
+    FutureBuilder<List<StaffData>>(
+  future: ApiService().fetchAllStaffOfSalon(
+    salonId: state.salon.data?.id?.toInt() ?? -1,
+  ).then((staffResponse) => staffResponse.data ?? []),  // ✅ Extract List<StaffData>
+  builder: (context, snapshot) {
+    if (snapshot.connectionState == ConnectionState.waiting) {
+      return Center(child: CircularProgressIndicator(color: ColorRes.themeColor));
+    }
+    if (snapshot.hasError || snapshot.data == null || snapshot.data!.isEmpty) {
+      return Center(child: Text("No specialists available"));
+    }
+
+    return SizedBox(
+      height: 120,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        itemCount: snapshot.data!.length,
+        itemBuilder: (context, index) {
+          final staff = snapshot.data![index];
+          return _buildSpecialistCard(staff);
+        },
+      ),
+    );
+  },
+),
                     TabBarOfSalonDetailWidget(
                       onTabChange: (selectedIndex) {
                         pageController.jumpToPage(selectedIndex);
                       },
                     ),
+                    
                     Expanded(
                       child: PageView(
                         controller: pageController,
@@ -126,7 +172,7 @@ Widget build(BuildContext context) {
                           SalonServicesPage(),
                           SalonGalleryPage(),
                           SalonStaffPage(),
-                          SalonReviewsPage(salonData: state.salon.data),
+                          SalonReviewsPage(salonData: state.salon.data, ),
                           SalonAwardsPage(),
                         ],
                       ),
@@ -136,7 +182,7 @@ Widget build(BuildContext context) {
               ),
             );
           } else {
-            return const LoadingImage(); // Handle loading state
+            return const LoadingImage(); 
           }
         },
       ),
@@ -151,21 +197,70 @@ Widget build(BuildContext context) {
       Container(
         padding: EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 254, 242, 224), // Light beige background
-          borderRadius: BorderRadius.circular(120), // Rounded corners
+          color: const Color.fromARGB(255, 254, 242, 224), 
+          borderRadius: BorderRadius.circular(120), 
         ),
         child: IconButton(
-          icon: Icon(icon, color: ColorRes.themeColor), // Brown color for icon
-          onPressed: onTap, // Action callback
+          icon: Icon(icon, color: ColorRes.themeColor), 
+          onPressed: onTap, 
         ),
       ),
-      SizedBox(height: 5), // Space between icon and label
+      SizedBox(height: 5),
       Text(
         label,
-        style: TextStyle(fontSize: 12, color: Colors.black), // Text color
+        style: TextStyle(fontSize: 12, color: Colors.black), 
       ),
     ],
   );
+}
+
+  Widget _buildSpecialistCard(StaffData staff) {
+  return GestureDetector(
+  onTap: () {
+    print("Specialist ${staff.name} tapped");
+  },
+  child: Container(
+    width: 100,
+    margin: const EdgeInsets.only(right: 10),
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(10),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.grey.withOpacity(0.2),
+          spreadRadius: 2,
+          blurRadius: 5,
+        ),
+      ],
+    ),
+    child: Column(
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(50),
+          child: Image.network(
+            staff.photo?.isNotEmpty == true ? staff.photo! :'',
+            width: 70,
+            height: 70,
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) => Icon(Icons.person, size: 50),
+          ),
+        ),
+        SizedBox(height: 5),
+        Text(
+          staff.name ?? "Unknown",
+          style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+          overflow: TextOverflow.ellipsis,
+        ),
+        Text(
+          staff.phone ?? "Specialist",
+          style: TextStyle(fontSize: 12, color: Colors.grey),
+          overflow: TextOverflow.ellipsis,
+        ),
+      ],
+    ),
+  ),
+);
+
 }
 
 }

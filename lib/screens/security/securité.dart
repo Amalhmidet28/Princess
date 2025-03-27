@@ -161,7 +161,6 @@ class ToggleSwitch extends StatefulWidget {
 class _ToggleSwitchState extends State<ToggleSwitch> with SingleTickerProviderStateMixin {
   late bool _isOn;
   late AnimationController _animationController;
-  late Animation<Offset> _toggleAnimation;
 
   @override
   void initState() {
@@ -173,13 +172,6 @@ class _ToggleSwitchState extends State<ToggleSwitch> with SingleTickerProviderSt
       duration: Duration(milliseconds: 200),
     );
 
-    _toggleAnimation = Tween<Offset>(
-      begin: Offset(0, 0),
-      end: Offset(1, 0),
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeInOut,
-    ));
 
     if (_isOn) {
       _animationController.value = 1.0;
