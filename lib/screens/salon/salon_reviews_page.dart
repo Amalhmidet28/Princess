@@ -36,44 +36,30 @@ class _SalonReviewsPageState extends State<SalonReviewsPage> {
                 Container(
                   width: double.infinity,
                   color: ColorRes.smokeWhite,
-                  padding: const EdgeInsets.symmetric(vertical: 10),
+                  padding: const EdgeInsets.symmetric(vertical: 15),
                   child: Column(
                     children: [
-                      Text(
-                        widget.salonData?.rating?.toStringAsFixed(1) ?? '',
-                        style: kThinWhiteTextStyle.copyWith(
-                          color: ColorRes.black,
-                          fontSize: 30,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(3),
-                        child: RatingBar(
-                          initialRating:
-                              widget.salonData?.rating?.toDouble() ?? 0,
-                          ignoreGestures: true,
-                          ratingWidget: RatingWidget(
-                            full: const Icon(
-                              Icons.star_rounded,
-                              color: ColorRes.sun,
-                            ),
-                            half: const Icon(
-                              Icons.star_rounded,
-                            ),
-                            empty: const Icon(
-                              Icons.star_rounded,
-                              color: ColorRes.darkGray,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.star_rounded, color: ColorRes.themeColor, size: 24),
+                          const SizedBox(width: 5),
+                          Text(
+                            '${widget.salonData?.rating?.toStringAsFixed(1) ?? '0.0'} ',
+                            style: kThinWhiteTextStyle.copyWith(
+                              color: ColorRes.black,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                          onRatingUpdate: (value) {},
-                          itemSize: 30,
-                        ),
-                      ),
-                      Text(
-                        '${widget.salonData?.reviewsCount}  ${AppLocalizations.of(context)!.ratings}',
-                        style: kLightWhiteTextStyle.copyWith(
-                          color: ColorRes.empress,
-                        ),
+                          Text(
+                            '(${widget.salonData?.reviewsCount ?? 0} reviews)',
+                            style: kLightWhiteTextStyle.copyWith(
+                              color: ColorRes.empress,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -83,15 +69,14 @@ class _SalonReviewsPageState extends State<SalonReviewsPage> {
                         itemCount: reviewBloc.reviews.length,
                         primary: false,
                         shrinkWrap: true,
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 10),
+                        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                         itemBuilder: (context, index) {
                           ReviewData? review = reviewBloc.reviews[index];
-                          return Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            child: Column(
+                              children: [
+                                Row(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     ClipOval(
@@ -102,27 +87,19 @@ class _SalonReviewsPageState extends State<SalonReviewsPage> {
                                           height: 50,
                                           width: 50,
                                           placeholder: '1',
-                                          image:
-                                              '${ConstRes.itemBaseUrl}${review.user?.profileImage ?? ''}',
+                                          image: '${ConstRes.itemBaseUrl}${review.user?.profileImage ?? ''}',
                                           fit: BoxFit.cover,
-                                          imageErrorBuilder:
-                                              (context, error, stackTrace) {
-                                            return const ImageNotFoundOval(
-                                              fontSize: 40,
-                                            );
+                                          imageErrorBuilder: (context, error, stackTrace) {
+                                            return const ImageNotFoundOval(fontSize: 40);
                                           },
-                                          placeholderErrorBuilder:
-                                              loadingImageTransParent,
+                                          placeholderErrorBuilder: loadingImageTransParent,
                                         ),
                                       ),
                                     ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
+                                    const SizedBox(width: 10),
                                     Expanded(
                                       child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Row(
                                             children: [
@@ -131,43 +108,31 @@ class _SalonReviewsPageState extends State<SalonReviewsPage> {
                                                 style: kRegularTextStyle,
                                               ),
                                               const Spacer(),
-                                              Text(
-                                                AppRes.timeAgo(AppRes.parseDate(
-                                                    review.createdAt ?? '')),
-                                                style: kLightWhiteTextStyle
-                                                    .copyWith(
-                                                  color: ColorRes.darkGray,
+                                              Container(
+                                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(color: ColorRes.darkGray),
+                                                  borderRadius: BorderRadius.circular(15),
                                                 ),
-                                              )
+                                                child: Row(
+                                                  children: [
+                                                    const Icon(Icons.star_rounded, color: ColorRes.themeColor, size: 16),
+                                                    const SizedBox(width: 3),
+                                                    Text(
+                                                      review.rating?.toString() ?? '0',
+                                                      style: kRegularTextStyle.copyWith(fontSize: 14),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                              const SizedBox(width: 10),
+                                              const Icon(Icons.more_vert, color: ColorRes.darkGray)
                                             ],
                                           ),
-                                          RatingBar(
-                                            initialRating:
-                                                review.rating?.toDouble() ?? 0,
-                                            ignoreGestures: true,
-                                            ratingWidget: RatingWidget(
-                                              full: const Icon(
-                                                Icons.star_rounded,
-                                                color: ColorRes.sun,
-                                              ),
-                                              half: const Icon(
-                                                Icons.star_rounded,
-                                              ),
-                                              empty: const Icon(
-                                                Icons.star_rounded,
-                                                color: ColorRes.darkGray,
-                                              ),
-                                            ),
-                                            onRatingUpdate: (value) {},
-                                            itemSize: 20,
-                                          ),
-                                          const SizedBox(
-                                            height: 5,
-                                          ),
+                                          const SizedBox(height: 5),
                                           Text(
                                             review.comment ?? '',
-                                            style:
-                                                kLightWhiteTextStyle.copyWith(
+                                            style: kLightWhiteTextStyle.copyWith(
                                               color: ColorRes.empress,
                                               fontSize: 17,
                                             ),
@@ -177,22 +142,17 @@ class _SalonReviewsPageState extends State<SalonReviewsPage> {
                                     ),
                                   ],
                                 ),
-                              ),
-                              Container(
-                                height: 0.5,
-                                width: double.infinity,
-                                color: ColorRes.darkGray,
-                              ),
-                            ],
+                                const SizedBox(height: 10),
+                                Divider(color: ColorRes.darkGray.withOpacity(0.3)),
+                              ],
+                            ),
                           );
                         },
                       )
                     : const SizedBox(
                         height: 200,
                         child: Center(
-                          child: LoadingData(
-                            color: ColorRes.white,
-                          ),
+                          child: LoadingData(color: ColorRes.white),
                         ),
                       ),
               ],

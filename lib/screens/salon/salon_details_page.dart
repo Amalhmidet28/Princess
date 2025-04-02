@@ -57,7 +57,6 @@ class SalonDetailsPage extends StatelessWidget {
                 ),
               ),
             ),
-          
             _buildWorkingHoursSection(context, salonDetailsBloc),
             _buildContactSection(context, salonDetailsBloc),
             _buildMapSection(context, salonDetailsBloc),
@@ -67,11 +66,6 @@ class SalonDetailsPage extends StatelessWidget {
     );
   }
 
- 
-
-
-
-
   Widget _buildWorkingHoursSection(
       BuildContext context, SalonDetailsBloc salonDetailsBloc) {
     return Padding(
@@ -79,7 +73,7 @@ class SalonDetailsPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Working Hours", style: kSemiBoldThemeTextStyle),
+          Text("Working Hours", style: kSemiBoldTextStyle),
           _buildTimeRow(
               "Monday - Friday",
               salonDetailsBloc.salonData?.monFriFrom,
@@ -113,100 +107,107 @@ class SalonDetailsPage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Contact Us", style: kSemiBoldThemeTextStyle),
+          Text("Contact Us", style: kSemiBoldTextStyle),
           GestureDetector(
             onTap: () => launchUrl(
                 Uri.parse('tel:${salonDetailsBloc.salonData?.salonPhone}')),
             child: Text("+${salonDetailsBloc.salonData?.salonPhone ?? ''}",
-                style: kLightWhiteTextStyle.copyWith(color: const Color.fromARGB(255, 198, 136, 83))),
+                style: kLightWhiteTextStyle.copyWith(
+                    color: const Color.fromARGB(255, 117, 67, 36))),
+          ), const SizedBox(
+                          width: 50,
+                        ),
+          Align(
+            alignment: Alignment.topLeft,
+            child: Text(
+              "Our Adresses",
+              style: kSemiBoldThemeTextStyle.copyWith(
+                fontSize: 18,
+                color: ColorRes.black,
+              ),
+            ),
           ),
         ],
       ),
     );
-  } 
+  }
 
-  Widget _buildMapSection(BuildContext context, SalonDetailsBloc salonDetailsBloc) {
-  return AspectRatio(
-    aspectRatio: 1 / .6,
-    child: Stack(
-      children: [
-        GMapDetails(salon: salonDetailsBloc.salonData),
-        Padding(
-          padding: const EdgeInsets.all(15.0),
-          child: Align(
-            alignment: Alignment.topLeft,
-            child: Text(
-              "Our Adresses",  // Title text for the section
-              style: kSemiBoldThemeTextStyle.copyWith(
-                fontSize: 18, 
-                color: ColorRes.empress, // Adjust this color to fit your theme
-              ),
-            ),
+  Widget _buildMapSection(
+      BuildContext context, SalonDetailsBloc salonDetailsBloc) {
+    return AspectRatio(
+      aspectRatio: 1 / .6,
+      child: Stack(
+        children: [
+          GMapDetails(salon: salonDetailsBloc.salonData),
+          Padding(
+            padding: const EdgeInsets.all(15.0),
           ),
-        ),
-        Align(
-          alignment: Alignment.bottomRight,
-          child: CustomCircularInkWell(
-            onTap: () async {
-              String iosUrl =
-                  'https://maps.apple.com/?q=${salonDetailsBloc.salonData?.salonLat},${salonDetailsBloc.salonData?.salonLong}';
-              if (Platform.isAndroid) {
-                String googleUrl =
-                    'https://www.google.com/maps/search/?api=1&query=${salonDetailsBloc.salonData?.salonLat},${salonDetailsBloc.salonData?.salonLong}';
-                if (await canLaunchUrl(Uri.parse(googleUrl))) {
-                  await launchUrl(Uri.parse(googleUrl));
+         
+          Align(
+            alignment: Alignment.bottomRight,
+            child: CustomCircularInkWell(
+              onTap: () async {
+                String iosUrl =
+                    'https://maps.apple.com/?q=${salonDetailsBloc.salonData?.salonLat},${salonDetailsBloc.salonData?.salonLong}';
+                if (Platform.isAndroid) {
+                  String googleUrl =
+                      'https://www.google.com/maps/search/?api=1&query=${salonDetailsBloc.salonData?.salonLat},${salonDetailsBloc.salonData?.salonLong}';
+                  if (await canLaunchUrl(Uri.parse(googleUrl))) {
+                    await launchUrl(Uri.parse(googleUrl));
+                  } else {
+                    throw 'Could not launch $googleUrl';
+                  }
                 } else {
-                  throw 'Could not launch $googleUrl';
+                  if (await canLaunchUrl(Uri.parse(iosUrl))) {
+                    await launchUrl(Uri.parse(iosUrl));
+                  } else {
+                    throw 'Could not open the map.';
+                  }
                 }
-              } else {
-                if (await canLaunchUrl(Uri.parse(iosUrl))) {
-                  await launchUrl(Uri.parse(iosUrl));
-                } else {
-                  throw 'Could not open the map.';
-                }
-              }
-            },
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-              child: ClipRRect(
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(10),
-                ),
-                child: Container(
-                  color: ColorRes.themeColor, // Adjust this to match the color from the screenshot
-                  width: 150,
-                  height: 45,
-                  child: Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(
-                          Icons.location_on,  // Location pin icon
-                          color: Colors.white,
-                          size: 20,
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        Text(
-                          AppLocalizations.of(context)!.seeOnMaps,  // Ensure the localization key is correct
-                          style: kRegularWhiteTextStyle.copyWith(
-                            fontSize: 16,
+              },
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(10),
+                  ),
+                  child: Container(
+                    color: ColorRes
+                        .themeColor, // Adjust this to match the color from the screenshot
+                    width: 150,
+                    height: 45,
+                    child: Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(
+                            Icons.location_on, // Location pin icon
+                            color: Colors.white,
+                            size: 20,
                           ),
-                        ),
-                      ],
+                          const SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            AppLocalizations.of(context)!
+                                .seeOnMaps, // Ensure the localization key is correct
+                            style: kRegularWhiteTextStyle.copyWith(
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
           ),
-        ),
-      ],
-    ),
-  );
-}
-
+        ],
+      ),
+    );
+  }
 }
 
 extension on AppLocalizations {
@@ -289,4 +290,3 @@ class _GMapDetailsState extends State<GMapDetails> {
     super.dispose();
   }
 }
-

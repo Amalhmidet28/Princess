@@ -3,8 +3,10 @@ import 'package:cutfx/model/staff/staff.dart';
 import 'package:cutfx/model/user/salon.dart';
 import 'package:cutfx/model/user/salon_user.dart';
 import 'package:cutfx/screens/barber/choose_barber_screen.dart';
+import 'package:cutfx/screens/chat/chat_screen.dart';
 import 'package:cutfx/screens/login/login_option_screen.dart';
 import 'package:cutfx/screens/main/main_screen.dart';
+import 'package:cutfx/screens/notification/notification_screen.dart';
 import 'package:cutfx/screens/salon/salon_awards_page.dart';
 import 'package:cutfx/screens/salon/salon_details_page.dart';
 import 'package:cutfx/screens/salon/salon_gallery_page.dart';
@@ -18,10 +20,12 @@ import 'package:cutfx/utils/color_res.dart';
 import 'package:cutfx/utils/const_res.dart';
 import 'package:cutfx/utils/custom/custom_widget.dart';
 import 'package:cutfx/utils/style_res.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_branch_sdk/flutter_branch_sdk.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -55,214 +59,419 @@ class _SalonDetailsScreenState extends State<SalonDetailsScreen> {
     });
   }
 
- @override
-Widget build(BuildContext context) {
-  return BlocProvider(
-    create: (context) => SalonDetailsBloc(),
-    child: Scaffold(
-      body: BlocBuilder<SalonDetailsBloc, SalonDetailsState>(
-        builder: (context, state) {
-          if (state is SalonDetailsLoading) {
-      return Center(child: CircularProgressIndicator(color: ColorRes.themeColor));
-      
-    }if (state is SalonDataError) {
-      return Center(child: Text(state.errorMessage, style: TextStyle(color: Colors.red)));
-    }
-          if (state is SalonDataFetched) {
-            final salonDetailsBloc = context.read<SalonDetailsBloc>(); // ✅ Correctly access the bloc instance
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => SalonDetailsBloc(),
+      child: Scaffold(
+        body: BlocBuilder<SalonDetailsBloc, SalonDetailsState>(
+          builder: (context, state) {
+            if (state is SalonDetailsLoading) {
+              return Center(
+                  child: CircularProgressIndicator(color: ColorRes.themeColor));
+            }
+            if (state is SalonDataError) {
+              return Center(
+                  child: Text(state.errorMessage,
+                      style: TextStyle(color: Colors.red)));
+            }
+            if (state is SalonDataFetched) {
+              final salonDetailsBloc = context.read<
+                  SalonDetailsBloc>();
 
-            return NestedScrollView(
-              controller: scrollController,
-              headerSliverBuilder: (context, innerBoxIsScrolled) {
-                return [
-                  TopBarOfSalonDetails(
-                    toolbarIsExpand: toolbarIsExpand,
-                    salonData: state.salon.data,
-                    userData: salonDetailsBloc.userData, // ✅ Access bloc data properly
-                  ),
-                ];
-              },
-              body: SafeArea(
-                top: false,
-                child: Column(
-                  children: [
-                    SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        _buildIconButton(Icons.language, 'Website', () {
-                          String websiteUrl = state.salon.data?.website ?? 'https://example.com';
-                          launchUrl(Uri.parse(websiteUrl), mode: LaunchMode.externalApplication);
-                        }),
-                        
-                        _buildIconButton(Icons.message, 'Message', () {
-                          String phone = state.salon.data?.salonPhone ?? '';
-                          launchUrl(Uri.parse('sms:$phone'), mode: LaunchMode.externalApplication);
-                        }),
-
-                        _buildIconButton(Icons.phone, 'Call', () {
-                          String phone = state.salon.data?.salonPhone ?? '';
-                          launchUrl(Uri.parse('tel:$phone'), mode: LaunchMode.externalApplication);
-                        }),
-
-                        _buildIconButton(Icons.location_on, 'Direction', () {
-                          String lat = state.salon.data?.latitude ?? '0';
-                          String lng = state.salon.data?.longitude ?? '0';
-                          String googleMapsUrl = 'https://www.google.com/maps/search/?api=1&query=$lat,$lng';
-                          launchUrl(Uri.parse(googleMapsUrl), mode: LaunchMode.externalApplication);
-                        }),
-
-                        _buildIconButton(Icons.share, 'Share', () {
-                          String salonName = state.salon.data?.salonName ?? 'Salon';
-                          String websiteUrl = state.salon.data?.website ?? 'https://example.com';
-                          Share.share('Check out $salonName: $websiteUrl');
-                        }),
-                      ],
+              return NestedScrollView(
+                controller: scrollController,
+                headerSliverBuilder: (context, innerBoxIsScrolled) {
+                  return [
+                    TopBarOfSalonDetails(
+                      toolbarIsExpand: toolbarIsExpand,
+                      salonData: state.salon.data,
+                      userData: salonDetailsBloc
+                          .userData, 
                     ),
-                     SizedBox(height: 20),
-
-    // Our Specialists Section
-    Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Text(
-        "Our Specialists",
-        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-      ),
-    ),
-    SizedBox(height: 10),
-
-    FutureBuilder<List<StaffData>>(
-  future: ApiService().fetchAllStaffOfSalon(
-    salonId: state.salon.data?.id?.toInt() ?? -1,
-  ).then((staffResponse) => staffResponse.data ?? []),  // ✅ Extract List<StaffData>
-  builder: (context, snapshot) {
-    if (snapshot.connectionState == ConnectionState.waiting) {
-      return Center(child: CircularProgressIndicator(color: ColorRes.themeColor));
-    }
-    if (snapshot.hasError || snapshot.data == null || snapshot.data!.isEmpty) {
-      return Center(child: Text("No specialists available"));
-    }
-
-    return SizedBox(
-      height: 120,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        itemCount: snapshot.data!.length,
-        itemBuilder: (context, index) {
-          final staff = snapshot.data![index];
-          return _buildSpecialistCard(staff);
-        },
-      ),
-    );
-  },
-),
-                    TabBarOfSalonDetailWidget(
-                      onTabChange: (selectedIndex) {
-                        pageController.jumpToPage(selectedIndex);
-                      },
-                    ),
-                    
-                    Expanded(
-                      child: PageView(
-                        controller: pageController,
-                        physics: const NeverScrollableScrollPhysics(),
+                  ];
+                },
+                body: SafeArea(
+                  top: false,
+                  child: Column(
+                    children: [
+                      SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          SalonDetailsPage(),
-                          SalonServicesPage(),
-                          SalonGalleryPage(),
-                          SalonStaffPage(),
-                          SalonReviewsPage(salonData: state.salon.data, ),
-                          SalonAwardsPage(),
+                          _buildIconButton(Icons.language, 'Website', () {
+                            String websiteUrl = state.salon.data?.website ??
+                                'https://example.com';
+                            launchUrl(Uri.parse(websiteUrl),
+                                mode: LaunchMode.externalApplication);
+                          }),
+                          _buildIconButton(Icons.message, 'Message', () {
+                            String phone = state.salon.data?.salonPhone ?? '';
+                            launchUrl(Uri.parse('sms:$phone'),
+                                mode: LaunchMode.externalApplication);
+                          }),
+                          _buildIconButton(Icons.phone, 'Call', () {
+                            String phone = state.salon.data?.salonPhone ?? '';
+                            launchUrl(Uri.parse('tel:$phone'),
+                                mode: LaunchMode.externalApplication);
+                          }),
+                          _buildIconButton(Icons.location_on, 'Direction', () {
+                            String lat = state.salon.data?.latitude ?? '0';
+                            String lng = state.salon.data?.longitude ?? '0';
+                            String googleMapsUrl =
+                                'https://www.google.com/maps/search/?api=1&query=$lat,$lng';
+                            launchUrl(Uri.parse(googleMapsUrl),
+                                mode: LaunchMode.externalApplication);
+                          }),
+                          _buildIconButton(Icons.share, 'Share', () {
+                            showShareSheet(context);
+                          }),
                         ],
                       ),
-                    ),
-                  ],
+                      SizedBox(height: 20),
+
+                      // Our Specialists Section
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Our Specialists",
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => SalonSpecialistsPage(
+                                      salonId: state.salon.data?.id?.toInt() ??
+                                          -1, 
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Text(
+                                "See All",
+                                style: TextStyle(
+                                    fontSize: 14, color: ColorRes.themeColor),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      FutureBuilder<List<StaffData>>(
+                        future: ApiService()
+                            .fetchAllStaffOfSalon(
+                              salonId: state.salon.data?.id?.toInt() ?? -1,
+                            )
+                            .then((staffResponse) =>
+                                staffResponse.data ??
+                                []), // ✅ Extract List<StaffData>
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Center(
+                                child: CircularProgressIndicator(
+                                    color: ColorRes.themeColor));
+                          }
+                          if (snapshot.hasError ||
+                              snapshot.data == null ||
+                              snapshot.data!.isEmpty) {
+                            return Center(
+                                child: Text("No specialists available"));
+                          }
+
+                          return SizedBox(
+                            height: 120,
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              itemCount: snapshot.data!.length,
+                              itemBuilder: (context, index) {
+                                final staff = snapshot.data![index];
+                                return _buildSpecialistCard(staff);
+                              },
+                            ),
+                          );
+                        },
+                      ),
+                      TabBarOfSalonDetailWidget(
+                        onTabChange: (selectedIndex) {
+                          pageController.jumpToPage(selectedIndex);
+                        },
+                      ),
+
+                      Expanded(
+                        child: PageView(
+                          controller: pageController,
+                          physics: const NeverScrollableScrollPhysics(),
+                          children: [
+                            SalonDetailsPage(),
+                            SalonServicesPage(),
+                            SalonGalleryPage(),
+                            SalonStaffPage(),
+                            SalonReviewsPage(
+                              salonData: state.salon.data,
+                            ),
+                            SalonAwardsPage(),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            );
-          } else {
-            return const LoadingImage(); 
-          }
-        },
+              );
+            } else {
+              return const LoadingImage();
+            }
+          },
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 
   // Helper method to build an icon button with label
   Widget _buildIconButton(IconData icon, String label, VoidCallback onTap) {
-  return Column(
-    children: [
-      Container(
-        padding: EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 254, 242, 224), 
-          borderRadius: BorderRadius.circular(120), 
-        ),
-        child: IconButton(
-          icon: Icon(icon, color: ColorRes.themeColor), 
-          onPressed: onTap, 
-        ),
-      ),
-      SizedBox(height: 5),
-      Text(
-        label,
-        style: TextStyle(fontSize: 12, color: Colors.black), 
-      ),
-    ],
-  );
-}
-
-  Widget _buildSpecialistCard(StaffData staff) {
-  return GestureDetector(
-  onTap: () {
-    print("Specialist ${staff.name} tapped");
-  },
-  child: Container(
-    width: 100,
-    margin: const EdgeInsets.only(right: 10),
-    decoration: BoxDecoration(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(10),
-      boxShadow: [
-        BoxShadow(
-          color: Colors.grey.withOpacity(0.2),
-          spreadRadius: 2,
-          blurRadius: 5,
-        ),
-      ],
-    ),
-    child: Column(
+    return Column(
       children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(50),
-          child: Image.network(
-            staff.photo?.isNotEmpty == true ? staff.photo! :'',
-            width: 70,
-            height: 70,
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) => Icon(Icons.person, size: 50),
+        Container(
+          padding: EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: const Color.fromARGB(255, 254, 242, 224),
+            borderRadius: BorderRadius.circular(120),
+          ),
+          child: IconButton(
+            icon: Icon(icon, color: ColorRes.themeColor),
+            onPressed: onTap,
           ),
         ),
         SizedBox(height: 5),
         Text(
-          staff.name ?? "Unknown",
-          style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-          overflow: TextOverflow.ellipsis,
-        ),
-        Text(
-          staff.phone ?? "Specialist",
-          style: TextStyle(fontSize: 12, color: Colors.grey),
-          overflow: TextOverflow.ellipsis,
+          label,
+          style: TextStyle(fontSize: 12, color: Colors.black),
         ),
       ],
+    );
+  }
+
+  Widget _buildSpecialistCard(StaffData staff) {
+    return GestureDetector(
+      onTap: () {
+        print("Specialist ${staff.name} tapped");
+      },
+      child: Container(
+        width: 100,
+        margin: const EdgeInsets.only(right: 10),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.2),
+              spreadRadius: 2,
+              blurRadius: 5,
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(50),
+              child: Image.network(
+                staff.photo?.isNotEmpty == true ? staff.photo! : '',
+                width: 70,
+                height: 70,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) =>
+                    Icon(Icons.person, size: 50),
+              ),
+            ),
+            SizedBox(height: 5),
+            Text(
+              staff.name ?? "Unknown",
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+              overflow: TextOverflow.ellipsis,
+            ),
+            Text(
+              staff.phone ?? "Specialist",
+              style: TextStyle(fontSize: 12, color: Colors.grey),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+ void showShareSheet(BuildContext context) {
+  showModalBottomSheet(
+    context: context,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),
-  ),
-);
+    builder: (context) {
+      return Container(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text("Share",
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            SizedBox(height: 10),
+            GridView.count(
+              crossAxisCount: 4,
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              children: [
+                _buildShareIcon("asset/whatsapp.png", "WhatsApp", "whatsapp://", "com.whatsapp"),
+                _buildShareIcon("asset/facebook.png", "Facebook", "fb://", "com.facebook.katana"),
+                _buildShareIcon("asset/insta.png", "Instagram", "instagram://", "com.instagram.android"),
+                _buildShareIcon("asset/twiter.png", "Twitter", "twitter://", "com.twitter.android"),
+                _buildShareIcon("asset/yahoo.png", "Yahoo", "mailto:", ""),
+                _buildShareIcon("asset/tiktok.png", "TikTok", "tiktok://", "com.zhiliaoapp.musically"),
+                _buildShareIcon("asset/chat.png", "Chat", "sms://", ""),
+                _buildShareIcon("asset/wechat.png", "WeChat", "weixin://", "com.tencent.mm"),
+              ],
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
 
 }
 
+Widget _buildShareIcon(String imagePath, String label, String urlScheme, String packageName) {
+  return GestureDetector(
+    onTap: () {
+      _launchURL(urlScheme, packageName);
+    },
+    child: Column(
+      children: [
+        CircleAvatar(
+          radius: 33,
+          backgroundColor: Colors.white,  // Default background color
+          child: Image.asset(
+            imagePath,
+            width: 30,
+            height: 30,
+            fit: BoxFit.cover,
+          ),
+        ),
+        SizedBox(height: 5),
+        Text(label, style: TextStyle(fontSize: 12)),
+      ],
+    ),
+  );
+}
+
+Future<void> _launchURL(String urlScheme, String packageName) async {
+  if (await canLaunch(urlScheme)) {
+    await launch(urlScheme);  // Try to open the app
+  } else {
+    // App is not installed, fallback to App Store or Play Store
+    if (defaultTargetPlatform == TargetPlatform.android) {
+      // For Android, use Play Store
+      final playStoreURL = 'https://play.google.com/store/apps/details?id=$packageName';
+      if (await canLaunch(playStoreURL)) {
+        await launch(playStoreURL);
+      } else {
+        throw 'Could not launch $playStoreURL';
+      }
+    } else if (defaultTargetPlatform == TargetPlatform.iOS) {
+      // For iOS, use App Store
+      final appStoreURL = 'https://apps.apple.com/us/app/$packageName';
+      if (await canLaunch(appStoreURL)) {
+        await launch(appStoreURL);
+      } else {
+        throw 'Could not launch $appStoreURL';
+      }
+    } else {
+      throw 'Could not launch $urlScheme';
+    }
+  }
+}
+
+
+class SalonSpecialistsPage extends StatelessWidget {
+  final int salonId;
+
+  const SalonSpecialistsPage({super.key, required this.salonId});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Our Specialists"),
+        actions: [
+          IconButton(
+            icon: Image.asset(
+                AssetRes.icNotification), 
+            onPressed: () {
+              Get.to(() => const NotificationScreen());
+            },
+          ),
+        ],
+      ),
+      body: FutureBuilder<List<StaffData>>(
+        future: ApiService()
+            .fetchAllStaffOfSalon(salonId: salonId)
+            .then((staffResponse) => staffResponse.data ?? []),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+                child: CircularProgressIndicator(color: ColorRes.themeColor));
+          }
+          if (snapshot.hasError ||
+              snapshot.data == null ||
+              snapshot.data!.isEmpty) {
+            return Center(child: Text("No specialists available"));
+          }
+
+          return ListView.builder(
+            padding: EdgeInsets.all(16),
+            itemCount: snapshot.data!.length,
+            itemBuilder: (context, index) {
+              final staff = snapshot.data![index];
+
+              return ListTile(
+                leading: CircleAvatar(
+                  backgroundImage: staff.photo?.isNotEmpty == true
+                      ? NetworkImage(staff.photo!)
+                      : null,
+                  child: staff.photo?.isNotEmpty == true
+                      ? null
+                      : Icon(Icons.person),
+                ),
+                title: Text(staff.name ?? "Unknown"),
+                subtitle: Text(staff.phone ?? "Specialist"),
+                trailing: ElevatedButton(
+                  onPressed: () {
+                    
+                    Get.to(() => ChatScreen());
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: ColorRes.themeColor, 
+                    foregroundColor: Colors.white, 
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                  ),
+                  child: Text("Message"),
+                ),
+              );
+            },
+          );
+        },
+      ),
+    );
+  }
 }
 
 class TabBarOfSalonDetailWidget extends StatefulWidget {

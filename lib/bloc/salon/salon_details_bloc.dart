@@ -37,6 +37,8 @@ class SalonDetailsBloc extends Bloc<SalonDetailsEvent, SalonDetailsState> {
   List<Categories> categories = [];
   List<Services> selectedServices = [];
 
+  var userId;
+
   void onChatBtnTap() {
     if (ConstRes.userIdValue == -1) {
       Get.to(() => const LoginOptionScreen());

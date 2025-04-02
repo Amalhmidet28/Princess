@@ -179,4 +179,6 @@ class ConstRes {
   static var authorisationKey = '----------------';
 
   static var weekday = 'weekday';
+
+  static var serviceData;
 }

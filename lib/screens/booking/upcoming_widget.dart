@@ -92,7 +92,7 @@ class ItemUpcomingBooking extends StatelessWidget {
                         isUtc: false,
                       )} : ${AppRes.convert24HoursInto12Hours(bookingData.time)}',
                       style: kLightWhiteTextStyle.copyWith(
-                        color: ColorRes.themeColor,
+                        color: const Color.fromARGB(255, 165, 115, 100),
                         fontSize: 16,
                       ),
                     ),

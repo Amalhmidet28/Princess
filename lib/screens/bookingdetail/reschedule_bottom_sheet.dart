@@ -72,12 +72,12 @@ class ReScheduleBottomSheet extends StatelessWidget {
                             color: ColorRes.empress,
                           ),
                         ),
-                        ItemStaff(
-                          staffData: reScheduleBloc.staffData,
-                          onTapChange: () {
-                            reScheduleBloc.selectStaff(reScheduleBloc);
-                          },
-                        ),
+                        // ItemStaff(
+                        //   staffData: reScheduleBloc.staffData,
+                        //   onTapChange: () {
+                        //     reScheduleBloc.selectStaff(reScheduleBloc);
+                        //   },
+                        // ),
                         const SizedBox(
                           height: 20,
                         ),

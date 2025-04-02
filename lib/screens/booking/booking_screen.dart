@@ -8,6 +8,7 @@ import 'package:cutfx/utils/style_res.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MyBookingScreen extends StatelessWidget {
   final Function()? onMenuClick;
@@ -28,11 +29,7 @@ class MyBookingScreen extends StatelessWidget {
               bottom: false,
               child: Row(
                 children: [
-                  BgRoundImageWidget(
-                    image: AssetRes.icMenu,
-                    imagePadding: 8,
-                    onTap: onMenuClick,
-                  ),
+                 
                   const SizedBox(
                     width: 15,
                   ),
@@ -40,7 +37,8 @@ class MyBookingScreen extends StatelessWidget {
                     AppLocalizations.of(context)!.myBookings,
                     style: kLightWhiteTextStyle.copyWith(
                       fontSize: 20,
-                      color: ColorRes.themeColor,
+                      color: const Color.fromARGB(255, 0, 0, 0),
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                 ],

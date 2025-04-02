@@ -2,156 +2,103 @@ import 'package:cutfx/bloc/salon/salon_details_bloc.dart';
 import 'package:cutfx/model/user/salon.dart';
 import 'package:cutfx/screens/booking/confirm_booking.dart';
 import 'package:cutfx/screens/login/login_option_screen.dart';
-import 'package:cutfx/screens/main/main_screen.dart';
+import 'package:cutfx/screens/notification/notification_screen.dart';
 import 'package:cutfx/screens/service/service_detail_screen.dart';
-import 'package:cutfx/utils/app_res.dart';
 import 'package:cutfx/utils/asset_res.dart';
 import 'package:cutfx/utils/color_res.dart';
 import 'package:cutfx/utils/const_res.dart';
-import 'package:cutfx/utils/custom/custom_widget.dart';
-import 'package:cutfx/utils/style_res.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/route_manager.dart';
 
-class SalonServicesPage extends StatefulWidget {
+class SalonServicesPage extends StatelessWidget {
   const SalonServicesPage({super.key});
 
   @override
-  State<SalonServicesPage> createState() => _SalonServicesPageState();
-}
-
-class _SalonServicesPageState extends State<SalonServicesPage> {
-  @override
   Widget build(BuildContext context) {
-    SalonDetailsBloc salonDetailsBloc = context.read<SalonDetailsBloc>();
-    return Column(
-      children: [
-        Expanded(
-          child: ListView.builder(
-            physics: const ClampingScrollPhysics(),
-            padding: const EdgeInsets.all(0),
-            itemCount: salonDetailsBloc.categories.length,
-            shrinkWrap: true,
-            primary: false,
-            itemBuilder: (context, index) {
-              Categories category = salonDetailsBloc.categories[index];
-              return ItemSalonDetailsService(
-                categories: category,
-                onUpdate: () {
-                  setState(() {});
-                },
-              );
-            },
-          ),
-        ),
-        Visibility(
-          visible: salonDetailsBloc.totalRates() != 0,
-          child: Container(
-            margin: const EdgeInsets.only(top: 10, bottom: 10),
-            height: 60,
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            width: double.infinity,
+    final SalonDetailsBloc salonDetailsBloc = context.read<SalonDetailsBloc>();
+    return Scaffold(
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 30),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        '${AppRes.currency}${salonDetailsBloc.totalRates()}',
-                        style: kBoldThemeTextStyle,
-                      ),
-                      Text(
-                        AppLocalizations.of(context)!.subTotal,
-                        style: kLightWhiteTextStyle.copyWith(
-                          color: ColorRes.empress,
-                          fontSize: 14,
+                const Text(
+                  'Our Services',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AllCategoriesScreen(
+                          categories: salonDetailsBloc.categories,
                         ),
                       ),
-                    ],
+                    );
+                  },
+                  child: Text(
+                    "See All",
+                    style: TextStyle(
+                        color: ColorRes.themeColor,
+                        fontWeight: FontWeight.bold),
                   ),
-                ),
-                Expanded(
-                  child: SizedBox(
-                    height: 55,
-                    child: TextButton(
-                      style: kButtonThemeStyle,
-                      onPressed: () {
-                        if (ConstRes.userIdValue == -1) {
-                          Get.to(() => const LoginOptionScreen());
-                          return;
-                        }
-                        Get.to(
-                          () => const ConfirmBookingScreen(),
-                          arguments: {
-                            ConstRes.salonData: salonDetailsBloc.salonData,
-                            ConstRes.services:
-                                salonDetailsBloc.selectedServices,
-                          },
-                        );
-                      },
-                      child: Text(
-                        AppLocalizations.of(context)!.placeBooking,
-                        style: kRegularWhiteTextStyle,
-                      ),
-                    ),
-                  ),
-                ),
+                )
               ],
             ),
           ),
-        ),
-      ],
-    );
-  }
-}
-
-class ItemSalonDetailsService extends StatelessWidget {
-  final Categories categories;
-  final Function()? onUpdate;
-
-  const ItemSalonDetailsService({
-    super.key,
-    required this.categories,
-    this.onUpdate,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 15,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(
-            height: 10,
-          ),
-          Text(
-            categories.title?.toUpperCase() ?? '',
-            style: kLightWhiteTextStyle.copyWith(
-              color: ColorRes.themeColor,
-              fontSize: 16,
-              letterSpacing: 2,
+          Expanded(
+            child: ListView.builder(
+              itemCount: salonDetailsBloc.categories.length,
+              padding: const EdgeInsets.all(16),
+              itemBuilder: (context, index) {
+                final category = salonDetailsBloc.categories[index];
+                return ServiceCard(category: category);
+              },
             ),
           ),
-          ListView.builder(
-            shrinkWrap: true,
-            primary: false,
-            itemCount: categories.services?.length ?? 0,
-            padding: const EdgeInsets.all(0),
-            itemBuilder: (context, index) {
-              Services? service = categories.services?[index];
-              return ItemServiceTYpeWidget(
-                service: service,
-                onUpdate: onUpdate,
-              );
-            },
+          Container(
+            padding: const EdgeInsets.all(16),
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: ColorRes.themeColor,
+                minimumSize: const Size(double.infinity, 50),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              onPressed: () {
+                if (salonDetailsBloc.totalRates() == 0) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                        content: Text(
+                            'Please select at least one service to book.')),
+                  );
+                  return;
+                }
+
+                if (ConstRes.userIdValue == -1) {
+                  Get.to(() => const LoginOptionScreen());
+                  return;
+                }
+
+                Get.to(
+                  () => const ConfirmBookingScreen(),
+                  arguments: {
+                    ConstRes.salonData: salonDetailsBloc.salonData,
+                    ConstRes.services: salonDetailsBloc.selectedServices,
+                  },
+                );
+              },
+              child: const Text('Book Now',
+                  style: TextStyle(color: Colors.white, fontSize: 16)),
+            ),
           ),
         ],
       ),
@@ -159,200 +106,216 @@ class ItemSalonDetailsService extends StatelessWidget {
   }
 }
 
-class ItemServiceTYpeWidget extends StatefulWidget {
-  const ItemServiceTYpeWidget({
-    super.key,
-    this.service,
-    this.onUpdate,
-  });
-  final Services? service;
-  final Function()? onUpdate;
+class AllCategoriesScreen extends StatelessWidget {
+  final List<Categories> categories;
 
-  @override
-  State<ItemServiceTYpeWidget> createState() => _ItemServiceTYpeWidgetState();
-}
-
-class _ItemServiceTYpeWidgetState extends State<ItemServiceTYpeWidget> {
-  bool isAdded = false;
-
-  @override
-  void initState() {
-    SalonDetailsBloc salonDetailsBloc = context.read<SalonDetailsBloc>();
-    isAdded = salonDetailsBloc.isSelected(widget.service?.id?.toInt() ?? -1);
-    super.initState();
-  }
+  AllCategoriesScreen({required this.categories});
 
   @override
   Widget build(BuildContext context) {
-    return CustomCircularInkWell(
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Our Services"),
+        actions: [
+          IconButton(
+            icon: Image.asset(AssetRes.icNotification), // Custom icon
+            onPressed: () {
+              Get.to(() => const NotificationScreen());
+            },
+          ),
+        ],
+      ),
+      body: ListView.builder(
+        itemCount: categories.length,
+        itemBuilder: (context, index) {
+          final category = categories[index];
+          return CategoryCard(category: category);
+        },
+      ),
+    );
+  }
+}
+
+class CategoryCard extends StatelessWidget {
+  final Categories category;
+
+  CategoryCard({required this.category});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
       onTap: () {
-        Get.to(
-          () => const ServiceDetailScreen(),
-          arguments: widget.service?.id?.toInt() ?? -1,
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                AllServicesScreen(services: category.services),
+          ),
         );
       },
       child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 8),
-        decoration: const BoxDecoration(
-          color: ColorRes.smokeWhite2,
-          borderRadius: BorderRadius.all(Radius.circular(15)),
+        margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(color: Colors.black12, blurRadius: 4),
+          ],
         ),
-        child: ClipRRect(
-          borderRadius: const BorderRadius.all(Radius.circular(15)),
-          child: Row(
-            children: [
-              SizedBox(
-                width: 130,
-                height: 110,
-                child: FadeInImage.assetNetwork(
-                  placeholder: '1',
-                  image:
-                      '${ConstRes.itemBaseUrl}${widget.service!.images!.isNotEmpty ? widget.service?.images?.first.image : ''}',
-                  fit: BoxFit.cover,
-                  imageErrorBuilder: errorBuilderForImage,
-                  placeholderErrorBuilder: loadingImage,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Text(
+                      category.title ?? 'No Title',
+                      style: TextStyle(
+                        fontSize: 18,
+                      ),
+                    ),
+                    SizedBox(width: 240), 
+                    Text(
+                      "${category.services?.length ?? 0} types",
+                      style: TextStyle(
+                          color: Colors.black, fontWeight: FontWeight.bold),
+                    ),
+                  ],
                 ),
-              ),
-              Expanded(
-                child: Container(
-                  color: isAdded ? ColorRes.lavender : ColorRes.smokeWhite2,
-                  padding: const EdgeInsets.only(
-                    bottom: 5,
-                    right: 10,
-                    left: 10,
-                  ),
-                  height: 110,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        widget.service?.title ?? '',
-                        style: kSemiBoldTextStyle.copyWith(
-                          color: ColorRes.nero,
-                          fontSize: 16,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 5,
-                      ),
-                      Row(
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    '${AppRes.currency}${(widget.service?.price?.toInt() ?? 0) - AppRes.calculateDiscountByPercentage(widget.service?.price?.toInt() ?? 0, widget.service?.discount?.toInt() ?? 0).toInt()}',
-                                    style: kBoldThemeTextStyle.copyWith(
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 5),
-                                    child: Text(
-                                      '-',
-                                      style: kThinWhiteTextStyle.copyWith(
-                                        color: ColorRes.mortar,
-                                      ),
-                                    ),
-                                  ),
-                                  Text(
-                                    AppRes.convertTimeForService(
-                                        widget.service?.serviceTime?.toInt() ??
-                                            0),
-                                    style: kThinWhiteTextStyle.copyWith(
-                                      color: ColorRes.mortar,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              Text(
-                                AppRes.getGenderTypeInStringFromNumber(context,
-                                    widget.service?.gender?.toInt() ?? 0),
-                                style: kLightWhiteTextStyle.copyWith(
-                                  color: ColorRes.empress,
-                                  fontSize: 12,
-                                  letterSpacing: 2,
-                                ),
-                              ),
-                            ],
-                          ),
-                          const Spacer(),
-                          PlusMinusImageWidget(
-                            onTapChange: (isAdded) {
-                              this.isAdded = isAdded;
-                              setState(() {});
-                              widget.onUpdate?.call();
-                            },
-                            services: widget.service,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
+              ],
+            ),
+            Icon(Icons.arrow_forward_ios, size: 18, color: Colors.brown),
+          ],
         ),
       ),
     );
   }
 }
 
-class PlusMinusImageWidget extends StatefulWidget {
-  final Function(bool isAdded)? onTapChange;
-  final Services? services;
+class ServiceCard extends StatelessWidget {
+  final Categories category;
 
-  const PlusMinusImageWidget({
-    super.key,
-    this.onTapChange,
-    this.services,
-  });
-
-  @override
-  State<PlusMinusImageWidget> createState() => _PlusMinusImageWidgetState();
-}
-
-class _PlusMinusImageWidgetState extends State<PlusMinusImageWidget> {
-  bool serviceIsAdded = false;
-  late SalonDetailsBloc salonDetailsBloc;
-
-  @override
-  void initState() {
-    salonDetailsBloc = context.read<SalonDetailsBloc>();
-    serviceIsAdded =
-        salonDetailsBloc.isSelected(widget.services?.id?.toInt() ?? -1);
-    super.initState();
-  }
+  const ServiceCard({super.key, required this.category});
 
   @override
   Widget build(BuildContext context) {
-    return CustomCircularInkWell(
-      onTap: () {
-        if (serviceIsAdded) {
-          salonDetailsBloc.selectedServices.remove(widget.services);
-        } else {
-          if (widget.services != null) {
-            salonDetailsBloc.selectedServices.add(widget.services!);
-          }
-        }
-        serviceIsAdded = !serviceIsAdded;
-        widget.onTapChange?.call(serviceIsAdded);
-        setState(() {});
-      },
-      child: BgRoundImageWidget(
-        image: serviceIsAdded ? AssetRes.icMinus : AssetRes.icPlus,
-        imagePadding: serviceIsAdded ? 11 : 7,
-        bgColor: serviceIsAdded ? ColorRes.monaLisa : ColorRes.themeColor,
-        height: 35,
-        width: 35,
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      elevation: 2,
+      child: ListTile(
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        title: Row(
+          mainAxisAlignment:
+              MainAxisAlignment.spaceBetween, 
+          children: [
+            Text(
+              category.title ?? 'No Title',
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 16,
+              ),
+            ),
+            Text(
+              "${category.services?.length ?? 0} types",
+              style: const TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+        trailing:
+            const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+        onTap: () {
+          // Navigate to AllServicesScreen with actual services
+          Get.to(
+            () => AllServicesScreen(services: category.services),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class AllServicesScreen extends StatelessWidget {
+  final List<Services>? services;
+
+  const AllServicesScreen({super.key, this.services});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Our services',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: ColorRes.black,
+          ),
+        ),
+        actions: [
+          IconButton(
+            icon: Image.asset(AssetRes.icNotification),
+            onPressed: () {
+              Get.to(() => const NotificationScreen());
+            },
+          ),
+        ],
+        centerTitle: true,
+        backgroundColor: ColorRes.white,
+        elevation: 1,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(12),
+        child: ListView.builder(
+          itemCount: services?.length ?? 0,
+          itemBuilder: (context, index) {
+            Services? service = services?[index];
+
+            return GestureDetector(
+              onTap: () {
+                Get.to(
+                  () => const ServiceDetailScreen(),
+                  arguments: service?.id?.toInt() ?? -1,
+                );
+              },
+              child: Container(
+                margin: const EdgeInsets.symmetric(vertical: 8),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 5,
+                      spreadRadius: 2,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: ListTile(
+                  contentPadding: const EdgeInsets.all(12),
+                  title: Text(
+                    service?.title ?? 'Service Name',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: ColorRes.black,
+                    ),
+                  ),
+                  trailing: const Icon(Icons.arrow_forward_ios,
+                      size: 16, color: ColorRes.themeColor),
+                ),
+              ),
+            );
+          },
+        ),
       ),
     );
   }

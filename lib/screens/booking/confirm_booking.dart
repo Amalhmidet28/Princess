@@ -16,6 +16,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:table_calendar/table_calendar.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ConfirmBookingScreen extends StatelessWidget {
@@ -36,6 +37,7 @@ class ConfirmBookingScreen extends StatelessWidget {
                 builder: (context, state) {
                   BookingsBloc bookingsBloc = context.read<BookingsBloc>();
 
+                  var selectedStaff;
                   return Column(
                     children: [
                       Expanded(
@@ -48,117 +50,103 @@ class ConfirmBookingScreen extends StatelessWidget {
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                Text(
-                                  AppLocalizations.of(context)!.salon,
-                                  style: kLightWhiteTextStyle.copyWith(
-                                    fontSize: 16,
-                                    color: ColorRes.empress,
+
+                                //calendar
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: Color(
+                                        0xFFF4E5DA), // Light beige background
+                                    borderRadius: BorderRadius.circular(
+                                        15), // Rounded corners
                                   ),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Text(
-                                  bookingsBloc.salonData?.salonName ?? '',
-                                  style: kBoldThemeTextStyle,
-                                ),
-                                Text(
-                                  bookingsBloc.salonData?.salonAddress ?? '',
-                                  style: kThinWhiteTextStyle.copyWith(
-                                    color: ColorRes.titleText,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                Row(
-                                  children: [
-                                    Text(
-                                      AppLocalizations.of(context)!.selectDate,
-                                      style: kLightWhiteTextStyle.copyWith(
+                                  padding: EdgeInsets.all(12),
+                                  child: TableCalendar(
+                                    firstDay: DateTime.utc(2020, 1, 1),
+                                    lastDay: DateTime.utc(2030, 12, 31),
+                                    focusedDay: bookingsBloc.selectedDate ??
+                                        DateTime.now(),
+                                    selectedDayPredicate: (day) {
+                                      return isSameDay(
+                                          day, bookingsBloc.selectedDate);
+                                    },
+                                    onDaySelected: (selectedDay, focusedDay) {
+                                      bookingsBloc.onClickCalenderDay(
+                                          selectedDay, bookingsBloc);
+                                    },
+
+                                    // Calendar Style
+                                    calendarStyle: CalendarStyle(
+                                      isTodayHighlighted: true,
+                                      outsideDaysVisible: false,
+                                      selectedDecoration: BoxDecoration(
+                                        gradient: LinearGradient(
+                                          colors: [
+                                            Color(0xFFA67C52),
+                                            Color(0xFFE3B788)
+                                          ], // Gradient for selection
+                                          begin: Alignment.topLeft,
+                                          end: Alignment.bottomRight,
+                                        ),
+                                        shape: BoxShape.circle,
+                                      ),
+                                      selectedTextStyle: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      todayDecoration: BoxDecoration(
+                                        color: Color(0xFFEAD7C0),
+                                        shape: BoxShape.circle,
+                                      ),
+                                      todayTextStyle: TextStyle(
+                                        color: Colors.black,
+                                      ),
+                                      defaultTextStyle: TextStyle(
+                                        color: Color(0xFF444444),
                                         fontSize: 16,
-                                        color: ColorRes.empress,
+                                      ),
+                                      weekendTextStyle: TextStyle(
+                                        color: Color(0xFFA67C52),
+                                        fontSize: 16,
                                       ),
                                     ),
-                                    const Spacer(),
-                                    Text(
-                                      '${AppRes.convertMonthNumberToName(context, bookingsBloc.month)} ${bookingsBloc.year}',
-                                      style: kMediumTextStyle.copyWith(
+
+                                    // Header Style
+                                    headerStyle: HeaderStyle(
+                                      formatButtonVisible: false,
+                                      titleCentered: true,
+                                      titleTextStyle: TextStyle(
                                         fontSize: 17,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xFF444444),
                                       ),
-                                    )
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                SizedBox(
-                                  height: 50,
-                                  child: ListView.builder(
-                                    itemCount: bookingsBloc.days.length,
-                                    scrollDirection: Axis.horizontal,
-                                    itemBuilder: (context, index) {
-                                      DateTime day = bookingsBloc.days[index];
-                                      bool isSelected =
-                                          day.day == bookingsBloc.day &&
-                                              day.month == bookingsBloc.month;
-                                      return CustomCircularInkWell(
-                                        onTap: () {
-                                          bookingsBloc.onClickCalenderDay(
-                                              day, bookingsBloc);
-                                        },
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            color: isSelected
-                                                ? ColorRes.themeColor
-                                                : ColorRes.smokeWhite,
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                          margin:
-                                              const EdgeInsets.only(right: 10),
-                                          child: AspectRatio(
-                                            aspectRatio: 1 / 1.1,
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  DateFormat('EE')
-                                                      .format(day)
-                                                      .toUpperCase(),
-                                                  style: kRegularThemeTextStyle
-                                                      .copyWith(
-                                                    color: isSelected
-                                                        ? ColorRes.white
-                                                        : ColorRes.charcoal,
-                                                    fontSize: 12,
-                                                    letterSpacing: 1,
-                                                  ),
-                                                ),
-                                                Text(
-                                                  day.day.toString(),
-                                                  style: kBoldThemeTextStyle
-                                                      .copyWith(
-                                                    fontSize: 20,
-                                                    color: isSelected
-                                                        ? ColorRes.white
-                                                        : ColorRes.charcoal,
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    },
+                                      leftChevronIcon: Icon(
+                                        Icons.chevron_left,
+                                        color: Color(0xFFA67C52),
+                                      ),
+                                      rightChevronIcon: Icon(
+                                        Icons.chevron_right,
+                                        color: Color(0xFFA67C52),
+                                      ),
+                                    ),
+
+                                    // Weekday Row
+                                    daysOfWeekStyle: DaysOfWeekStyle(
+                                      weekdayStyle: TextStyle(
+                                        color: Color(0xFF444444),
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                      weekendStyle: TextStyle(
+                                        color: Color(0xFFA67C52),
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
                                   ),
                                 ),
+
                                 const SizedBox(
                                   height: 20,
                                 ),
+
                                 Text(
                                   AppLocalizations.of(context)!.selectBarber,
                                   style: kLightWhiteTextStyle.copyWith(
@@ -342,102 +330,13 @@ class ConfirmBookingScreen extends StatelessWidget {
                                 const SizedBox(
                                   height: 15,
                                 ),
-                                Text(
-                                  AppLocalizations.of(context)!.serviceLocation,
-                                  style: kLightWhiteTextStyle.copyWith(
-                                    fontSize: 16,
-                                    color: ColorRes.empress,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 5,
-                                ),
-                                Obx(
-                                  () => Row(
-                                    children: [
-                                      ItemOptionsWidget(
-                                        title: AppLocalizations.of(context)!
-                                            .atSalon,
-                                        index: 0,
-                                        isSelected: bookingsBloc
-                                                .serviceLocationType.value ==
-                                            0,
-                                        onClick: (position) {
-                                          bookingsBloc.serviceLocationType
-                                              .value = position;
-                                        },
-                                      ),
-                                      const SizedBox(
-                                        width: 15,
-                                      ),
-                                      Visibility(
-                                        visible: bookingsBloc
-                                                .salonData?.isServeOutside
-                                                ?.toInt() ==
-                                            1,
-                                        child: ItemOptionsWidget(
-                                          title: AppLocalizations.of(context)!
-                                              .myAddress,
-                                          index: 1,
-                                          isSelected: bookingsBloc
-                                                  .serviceLocationType.value ==
-                                              1,
-                                          onClick: (position) {
-                                            bookingsBloc.serviceLocationType
-                                                .value = position;
-                                          },
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                Obx(
-                                  () => Visibility(
-                                      visible: bookingsBloc
-                                              .serviceLocationType.value ==
-                                          1,
-                                      child: bookingsBloc
-                                                  .addressData.value.id ==
-                                              -1
-                                          ? CustomCircularInkWell(
-                                              onTap: bookingsBloc
-                                                  .onClickSelectAddress,
-                                              child: Container(
-                                                height: bookingsBloc
-                                                            .serviceLocationType
-                                                            .value ==
-                                                        0
-                                                    ? 0
-                                                    : 55,
-                                                width: double.infinity,
-                                                decoration: BoxDecoration(
-                                                  color: ColorRes.smokeWhite,
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                ),
-                                                child: Center(
-                                                  child: Text(
-                                                    AppLocalizations.of(
-                                                            context)!
-                                                        .selectAddress,
-                                                    style: kLightWhiteTextStyle
-                                                        .copyWith(
-                                                      color: ColorRes.empress,
-                                                      fontSize: 16,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            )
-                                          : AddressWidget(
-                                              bookingsBloc: bookingsBloc)),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
+                                // Text(
+                                //   AppLocalizations.of(context)!.serviceLocation,
+                                //   style: kLightWhiteTextStyle.copyWith(
+                                //     fontSize: 16,
+                                //     color: ColorRes.empress,
+                                //   ),
+                                // ),
                                 Text(
                                   AppLocalizations.of(context)!.services,
                                   style: kLightWhiteTextStyle.copyWith(

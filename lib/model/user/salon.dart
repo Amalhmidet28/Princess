@@ -34,6 +34,8 @@ class Salon {
 
   var name;
 
+  var gallery;
+
   Salon copyWith({
     bool? status,
     String? message,
@@ -1015,6 +1017,8 @@ class Services {
   List<ServiceImages>? _images;
   SalonData? _salonData;
   Category? _category;
+
+  var types;
 
   Services copyWith({
     num? id,

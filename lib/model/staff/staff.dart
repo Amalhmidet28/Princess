@@ -60,6 +60,7 @@ class StaffData {
     num? rating,
     String? photo,
     String? name,
+    String? role,
     String? phone,
     num? gender,
     num? bookingsCount,
@@ -72,6 +73,7 @@ class StaffData {
     _rating = rating;
     _photo = photo;
     _name = name;
+    _role = role;
     _phone = phone;
     _gender = gender;
     _bookingsCount = bookingsCount;
@@ -86,6 +88,7 @@ class StaffData {
     _rating = json['rating'];
     _photo = json['photo'];
     _name = json['name'];
+    _role = json['role'];
     _phone = json['phone'];
     _gender = json['gender'];
     _bookingsCount = json['bookings_count'];
@@ -105,6 +108,8 @@ class StaffData {
   String? _createdAt;
   String? _updatedAt;
 
+  String? _role;
+
   StaffData copyWith({
     num? id,
     num? salonId,
@@ -112,6 +117,7 @@ class StaffData {
     num? rating,
     String? photo,
     String? name,
+    String? role,
     String? phone,
     num? gender,
     num? bookingsCount,
@@ -125,6 +131,7 @@ class StaffData {
         rating: rating ?? _rating,
         photo: photo ?? _photo,
         name: name ?? _name,
+        role: role ?? _role,
         phone: phone ?? _phone,
         gender: gender ?? _gender,
         bookingsCount: bookingsCount ?? _bookingsCount,
@@ -144,6 +151,8 @@ class StaffData {
 
   String? get name => _name;
 
+  String? get role => _role; 
+
   String? get phone => _phone;
 
   num? get gender => _gender;
@@ -162,6 +171,7 @@ class StaffData {
     map['rating'] = _rating;
     map['photo'] = _photo;
     map['name'] = _name;
+    map['role'] = _role;
     map['phone'] = _phone;
     map['gender'] = _gender;
     map['bookings_count'] = _bookingsCount;
